@@ -1,3 +1,5 @@
+
+
 import React, { useRef, useState, useMemo } from 'react';
 import { motion, useTransform, useMotionValue, useSpring, useScroll } from 'framer-motion';
 import Spotlight3D from '../components/Spotlight3D';
@@ -29,14 +31,14 @@ const heroCards = [
       id: 1, 
       color: '#FF7F27', 
       rotate: -12, // 🟢 Adjust individual rotation here
-      img: 'https://cdn.jsdelivr.net/gh/jayneysil520-dev/jayneysil@main/1.png',
+      img: 'https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/1.png',
       scale: 1.15  // 🟢 Adjust individual scale here
   }, 
   { 
       id: 2, 
       color: '#00A2E8', 
       rotate: 8, 
-      img: 'https://cdn.jsdelivr.net/gh/jayneysil520-dev/jayneysil@main/2.png',
+      img: 'https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/2.png',
       scale: 1.05
   }, 
   { 
@@ -44,13 +46,13 @@ const heroCards = [
       color: '#55FFFF', 
       rotate: -15, 
       scale: 0.95,
-      img: 'https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/%E7%8C%BF%E8%BE%85%E5%AF%BC%E5%B0%81%E9%9D%A2.png'
+      img: 'https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/%E7%8C%BF%E8%BE%85%E5%AF%BC%E5%B0%81%E9%9D%A2.png'
   }, 
   {   id: 4, 
       color: '#00FF40', 
       rotate: 10, 
       scale: 0.9,
-      img: 'https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/%E5%8D%AB%E5%B2%97/%E5%B0%81%E9%9D%A2%E5%9B%BE.png'
+      img: 'https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/%E5%8D%AB%E5%B2%97/%E5%B0%81%E9%9D%A2%E5%9B%BE.png'
   }, 
   { id: 5, color: '#FFCCAA', rotate: 5, scale: 1.0 }, 
 ];
