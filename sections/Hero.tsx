@@ -1,5 +1,4 @@
 
-
 import React, { useRef, useState, useMemo } from 'react';
 import { motion, useTransform, useMotionValue, useSpring, useScroll } from 'framer-motion';
 import Spotlight3D from '../components/Spotlight3D';
@@ -16,17 +15,18 @@ const HERO_SCALE = 0.7;
 // 🟢 2. CARD SIZE: Base width for the cards
 const CARD_SIZE_CLASSES = "w-[240px] md:w-[300px]"; 
 
-// 🟢 3. CARD POSITIONS: Adjust 'left' (X) and 'top' (Y) for each card slot (1-8)
+// 🟢 3. CARD POSITIONS: Randomized "Messy Floor" Layout
+// Designed to look like cards thrown on a surface
 const CARD_LAYOUT_CONFIG = [
-    { left: '15%', top: '45%', zIndex: 10 }, // Card 1
-    { left: '65%', top: '50%', zIndex: 12 }, // Card 2
-    { left: '25%', top: '65%', zIndex: 14 }, // Card 3
-    { left: '80%', top: '40%', zIndex: 8 },  // Card 4
-    { left: '50%', top: '55%', zIndex: 15 }, // Card 5
-    // 🟢 NEW CARDS
-    { left: '8%', top: '25%', zIndex: 5 },   // Card 6 (Top Left)
-    { left: '85%', top: '65%', zIndex: 13 }, // Card 7 (Bottom Right)
-    { left: '42%', top: '15%', zIndex: 4 },  // Card 8 (Top Center)
+    { left: '-12%',  top: '-8%', zIndex: 10 }, // Top Left (High)
+    { left: '77%', top: '58%', zIndex: 12 }, // Bottom Right (Cluster)
+    { left: '5%', top: '60%', zIndex: 14 }, // Bottom Left (Foreground)
+    { left: '97%', top: '12%', zIndex: 8 },  // Top Right (Corner)
+    { left: '38%', top: '62%', zIndex: 15 }, // Bottom Center (Overlap)
+    // 🟢 NEW CARDS SCATTERED
+    { left: '12%', top: '35%', zIndex: 5 },  // Middle Left (Background)
+    { left: '75%', top: '6%',  zIndex: 13 }, // Top Right Center
+    { left: '67%', top: '30%', zIndex: 6 },  // Center (Underneath title)
 ];
 
 // --- DATA ---
@@ -34,60 +34,58 @@ const heroCards = [
   { 
       id: 1, 
       color: '#FF7F27', 
-      rotate: -12, // 🟢 Adjust individual rotation here
+      rotate: 25, // More extreme rotation
       img: 'https://cdn.jsdelivr.net/gh/jayneysil520-dev/jayneysil@main/1.png',
-      // 🟢 SCALE PARAMETER: Change this value to resize specific cards (e.g. 1.2 = 120% size)
-      scale: 1.15  
+      scale: 1.32 // Larger feature card
   }, 
   { 
       id: 2, 
       color: '#00A2E8', 
-      rotate: 8, 
+      rotate: 15, 
       img: 'https://cdn.jsdelivr.net/gh/jayneysil520-dev/jayneysil@main/2.png',
-      scale: 1.05
+      scale: 1.14
   }, 
   { 
       id: 3, 
       color: '#55FFFF', 
-      rotate: -15, 
-      scale: 0.95,
+      rotate: -35, // Sharp angle
+      scale: 0.94,
       img: 'https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/%E7%8C%BF%E8%BE%85%E5%AF%BC%E5%B0%81%E9%9D%A2.png'
   }, 
   {   id: 4, 
       color: '#00FF40', 
-      rotate: 10, 
-      scale: 0.9,
+      rotate: 42, // Extreme angle
+      scale: 1.16,
       img: 'https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/%E5%8D%AB%E5%B2%97/%E5%B0%81%E9%9D%A2%E5%9B%BE.png'
   }, 
   { 
       id: 5, 
       color: '#FFCCAA', 
-      rotate: 5, 
-      scale: 1.0,
-      // Fallback pattern if no image, or can add image
+      rotate: 8, 
+      scale: 1.19,
       img: 'https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/nezha/%E5%93%AA%E5%90%92%E6%B5%B7%E8%B4%BC%E7%8E%8B.png' 
   }, 
   // 🟢 NEW CARDS DATA
   { 
       id: 6, 
       color: '#E0221E', 
-      rotate: 15, 
-      scale: 0.92,
+      rotate: 28, 
+      scale: 0.84, // Small, thrown far
       img: 'https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/animation/%E8%A7%86%E9%A2%91%E5%B0%81%E9%9D%A2.png'
   },
   { 
       id: 7, 
       color: '#AA88EE', 
-      rotate: -8, 
-      scale: 1.1,
-      img: 'https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/animation/%E8%A7%86%E9%A2%91%E5%B0%81%E9%9D%A2.png'
+      rotate: -12, 
+      scale: 1.04,
+      img: 'https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/animation/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_2026-02-02_223917_470.jpg'
   },
   { 
       id: 8, 
       color: '#4ECDC4', 
-      rotate: 20, 
-      scale: 0.88,
-      img: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=1000&auto=format&fit=crop'
+      rotate: 55, // Very sharp rotation
+      scale: 0.79,
+      img: 'https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/animation/Group%20951.png'
   }
 ];
 
@@ -122,7 +120,7 @@ const FloatingHeroCard: React.FC<{ card: any, index: number, hasEntered: boolean
             }}
             initial={{ opacity: 0, x: initialX, rotate: card.rotate * 2 }}
             animate={hasEntered ? { opacity: 1, x: 0, rotate: card.rotate } : {}}
-            transition={{ duration: 0.6, delay: index * 0.08, type: "spring", stiffness: 60, damping: 12 }}
+            transition={{ duration: 0.8, delay: index * 0.05, type: "spring", stiffness: 50, damping: 15 }} // Slightly looser spring for "thrown" feel
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
         >
