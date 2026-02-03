@@ -328,9 +328,13 @@ export const PROJECTS_DATA = [
       ]
   },
   { 
-      id: 8, title: '自媒体设计能力沉淀', label: 'Personal Growth', year: '2021-2026', color: '#FF0055', 
-      img: 'https://images.unsplash.com/photo-1515405295579-ba7f45403022?q=80&w=1000&auto=format&fit=crop', 
+      id: 8, title: '设计能力沉淀', label: 'Personal Growth', year: '2021-2026', color: '#FF0055', 
+      img: 'https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/animation/Group%20951.png', 
       desc: 'Visualizing sound waves in real-time using WebAudio API and Canvas.',
       tools: ['Figma', 'PS']
+      layout: 'gallery',
+      detailImages: [
+          'https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/animation/%E7%BD%91%E9%A1%B5%E9%95%BF%E5%9B%BE.png',
+      ]
   }
 ];

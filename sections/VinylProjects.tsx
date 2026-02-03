@@ -359,52 +359,59 @@ const FlipVideoCard: React.FC<{
     );
 };
 
-// 🟢 NEW: Horizontal Scroll Gallery Component
-const HorizontalScrollGallery: React.FC<{ items: any[]; parentScrollRef: React.RefObject<HTMLDivElement>; color: string }> = ({ items, parentScrollRef, color }) => {
+// 🟢 UPDATED: Horizontal Scroll Gallery now manages its own scroll container
+// This fixes the issue where useScroll fails to bind to a passed ref in production/Vercel
+const HorizontalScrollGallery: React.FC<{ items: any[]; color: string }> = ({ items, color }) => {
+    // 🟢 INTERNAL REFS for robust scroll tracking
+    const containerRef = useRef<HTMLDivElement>(null); 
     const targetRef = useRef<HTMLDivElement>(null);
-    const [activeVideoIndex, setActiveVideoIndex] = useState<number | null>(null); // 🟢 Track which video is making sound
+    const [activeVideoIndex, setActiveVideoIndex] = useState<number | null>(null);
     
-    // Use the scrolling of the main modal container (parentScrollRef) to drive this animation
+    // 🟢 useScroll now uses the internal containerRef which is guaranteed to exist when this component mounts
     const { scrollYProgress } = useScroll({
-        container: parentScrollRef,
+        container: containerRef,
         target: targetRef,
         offset: ["start start", "end end"]
     });
 
-    // Map vertical scroll (0 to 1) to horizontal movement
-    // Adjust the "end" percentage based on number of items + gap.
     const x = useTransform(scrollYProgress, [0, 1], ["0%", "-65%"]);
 
     return (
-        // 🟢 FIX FOR PRODUCTION SCROLL: Ensure container is relative and has explicit height to force scroll
-        <div ref={targetRef} className="relative w-full h-[400vh]"> 
-             {/* Sticky container must be relative to this wrapper, and Top-0 */}
-             <div className="sticky top-0 h-[100vh] w-full flex items-center overflow-hidden bg-black/95">
-                 {/* 🟢 INCREASED GAP FOR TEXT SPACING + LEFT PADDING */}
-                 <motion.div style={{ x }} className="flex items-center pl-[25vw] gap-48">
-                     <div className="flex items-center shrink-0">
-                        <div className="mr-12 flex flex-col justify-center min-w-[300px]">
-                            <h2 className="text-6xl font-albert-black text-white mb-4">VIDEO<br/>GALLERY</h2>
-                            <p className="text-white/50 text-sm w-48">Scroll down to explore the collection. Click cards to view videos.</p>
-                            <div className="w-12 h-1 mt-6" style={{ backgroundColor: color }} />
+        // 🟢 THE SCROLL CONTAINER IS NOW HERE
+        <div 
+            ref={containerRef} 
+            className="w-full h-full overflow-y-auto overflow-x-hidden floating-scrollbar relative z-10 p-0 bg-black block"
+        >
+            {/* The tall ghost element that forces scrolling */}
+            <div ref={targetRef} className="relative w-full h-[400vh]"> 
+                {/* Sticky viewport */}
+                <div className="sticky top-0 h-[100vh] w-full flex items-center overflow-hidden bg-black/95">
+                    {/* Content moving horizontally */}
+                    <motion.div style={{ x }} className="flex items-center pl-[25vw] gap-48">
+                        <div className="flex items-center shrink-0">
+                            <div className="mr-12 flex flex-col justify-center min-w-[300px]">
+                                <h2 className="text-6xl font-albert-black text-white mb-4">VIDEO<br/>GALLERY</h2>
+                                <p className="text-white/50 text-sm w-48">Scroll down to explore the collection. Click cards to view videos.</p>
+                                <div className="w-12 h-1 mt-6" style={{ backgroundColor: color }} />
+                            </div>
                         </div>
-                     </div>
-                     
-                     {items.map((item, index) => (
-                          <FlipVideoCard 
-                            key={item.id} 
-                            item={item} 
-                            index={index} 
-                            color={color}
-                            activeVideoIndex={activeVideoIndex}
-                            setActiveVideoIndex={setActiveVideoIndex} 
-                          />
-                     ))}
-                     
-                     {/* End Spacer */}
-                     <div className="w-[50vw] shrink-0" />
-                 </motion.div>
-             </div>
+                        
+                        {items.map((item, index) => (
+                            <FlipVideoCard 
+                                key={item.id} 
+                                item={item} 
+                                index={index} 
+                                color={color}
+                                activeVideoIndex={activeVideoIndex}
+                                setActiveVideoIndex={setActiveVideoIndex} 
+                            />
+                        ))}
+                        
+                        {/* End Spacer */}
+                        <div className="w-[50vw] shrink-0" />
+                    </motion.div>
+                </div>
+            </div>
         </div>
     );
 };
@@ -847,15 +854,8 @@ const GalleryModalView: React.FC<{ images: string[], projectId?: number, project
     // 🟢 Special Render for Horizontal Scroll Project (Project 6)
     if (project?.layout === 'horizontal-scroll' && project.horizontalData) {
         return (
-            // 🟢 FIX FOR VERCEL: Ensure this container has explicit full height and relative positioning
-            <div
-                ref={scrollContainerRef}
-                onScroll={handleScroll}
-                className="w-full h-full overflow-y-auto overflow-x-hidden floating-scrollbar relative z-10 p-0 bg-black block"
-            >
-                {/* 🟢 PASS THE PROJECT COLOR DOWN */}
-                <HorizontalScrollGallery items={project.horizontalData} parentScrollRef={scrollContainerRef} color={project.color} />
-            </div>
+            // 🟢 UPDATED: Pass Project Color, let HorizontalScrollGallery handle the container
+            <HorizontalScrollGallery items={project.horizontalData} color={project.color} />
         );
     }
 
@@ -969,6 +969,25 @@ const GalleryModalView: React.FC<{ images: string[], projectId?: number, project
                                 })}
                             </div>
                         </div>
+                    ) : project?.topSequenceConfig ? (
+                        // 🟢 PROJECT 4 (or generic): Sequence at Top Logic
+                        <>
+                            {/* 1. SCROLL SEQUENCE AT TOP */}
+                            <ScrollImageSequence config={project.topSequenceConfig} scrollContainerRef={scrollContainerRef} />
+                            
+                            {/* 2. Standard Images following the sequence */}
+                            {images.map((imgUrl, index) => (
+                                <div key={index} className="w-full bg-black">
+                                    <img 
+                                        src={imgUrl} 
+                                        className="w-full h-auto block" 
+                                        loading="lazy" 
+                                        decoding="async" 
+                                        alt={`Project Detail ${index + 1}`} 
+                                    />
+                                </div>
+                            ))}
+                        </>
                     ) : (
                         // Default rendering for other projects
                         images.map((imgUrl, index) => (
