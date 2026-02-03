@@ -1,3 +1,4 @@
+
 import React, { useRef, useState, useMemo } from 'react';
 import { motion, useTransform, useMotionValue, useSpring, useScroll, useMotionTemplate, AnimatePresence } from 'framer-motion';
 import Magnetic from '../components/Magnetic';
@@ -70,13 +71,59 @@ const skills = [
     },
 ];
 
+// 🟢 SOFTWARE ICONS DATA
+// Added 'y' for the button itself
+// Added 'previewY' for the card that flies in
 const softwares = [
-    { name: 'Fig', iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg', color: '#F24E1E', previewRotate: 15 }, 
-    { name: 'Ps', iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/photoshop/photoshop-plain.svg', color: '#31A8FF', previewRotate: -10 }, 
-    { name: 'Ai', iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/illustrator/illustrator-plain.svg', color: '#FF9A00', previewRotate: 8 }, 
-    { name: 'Ae', iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/aftereffects/aftereffects-original.svg', color: '#9999FF', previewRotate: -15 }, 
-    { name: 'Bl', iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/blender/blender-original.svg', color: '#F5792A', previewRotate: 12 }, 
-    { name: 'C4D', iconUrl: 'https://cdn.jsdelivr.net/gh/jayneysil520-dev/jayneysil@main/1197px-C4D_Logo.png', color: '#2A55F5', previewRotate: -8 }, 
+    { 
+        name: 'Fig', 
+        iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg', 
+        color: '#F24E1E', 
+        previewRotate: 15, 
+        y: 0,
+        // 🟢 PREVIEW Y-AXIS: Adjust the vertical position of the flying card (pixels)
+        previewY: 0 
+    }, 
+    { 
+        name: 'Ps', 
+        iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/photoshop/photoshop-plain.svg', 
+        color: '#31A8FF', 
+        previewRotate: -10, 
+        y: 5,
+        previewY: -10 // Example: Move Up by 50px
+    }, 
+    { 
+        name: 'Ai', 
+        iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/illustrator/illustrator-plain.svg', 
+        color: '#FF9A00', 
+        previewRotate: 8, 
+        y: -2,
+        previewY: 6 // Example: Move Down by 20px
+    }, 
+    { 
+        name: 'Ae', 
+        iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/aftereffects/aftereffects-original.svg', 
+        color: '#9999FF', 
+        previewRotate: -15, 
+        y: 12,
+        previewY: 0 
+    }, 
+    { 
+        name: 'Bl', 
+        iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/blender/blender-original.svg', 
+        color: '#F5792A', 
+        previewRotate: 12, 
+        y: -2,
+        previewY: -8 
+    }, 
+    { 
+        name: 'C4D', 
+        iconUrl: 'https://cdn.jsdelivr.net/gh/jayneysil520-dev/jayneysil@main/1197px-C4D_Logo.png', 
+        color: '#2A55F5', 
+        previewRotate: -8, 
+        y: 6,
+        previewY: 4 
+    }, 
 ];
 
 // --- DEPTH CONFIG ---
@@ -208,17 +255,24 @@ const SoftwareGlassButton: React.FC<{
     onHoverEnd: () => void
 }> = ({ sw, index, onHoverStart, onHoverEnd }) => {
     const rotation = React.useMemo(() => Math.random() * 10 - 5, []);
+    
+    // 🟢 Define base Y from config
+    const baseY = sw.y || 0;
+    // 🟢 Define hover Y (lift up 15px from base)
+    const hoverY = baseY - 15;
 
     return (
         <Magnetic strength={20}>
             <motion.div
                 initial={{ opacity: 0, y: 100 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                // 🟢 Apply base Y here
+                whileInView={{ opacity: 1, y: baseY }}
                 viewport={{ once: true, margin: "-50px" }}
                 onMouseEnter={() => { onHoverStart(); }}
                 onMouseLeave={() => { onHoverEnd(); }}
                 transition={{ delay: 0.1 + index * 0.08, type: "spring", stiffness: 50, damping: 12 }}
-                whileHover={{ scale: 1.15, y: -10, rotateZ: 0, zIndex: 100 }}
+                // 🟢 Apply hover Y here
+                whileHover={{ scale: 1.15, y: hoverY, rotateZ: 0, zIndex: 100 }}
                 // Original Size
                 className={`${SOFTWARE_ICON_CLASS} rounded-2xl bg-white/40 backdrop-blur-xl border border-white/60 shadow-[0_10px_20px_-5px_rgba(0,0,0,0.15),0_4px_0_rgba(255,255,255,0.3)] flex items-center justify-center cursor-pointer group relative overflow-hidden will-change-transform`}
                 style={{ rotate: `${rotation}deg` }}
@@ -448,7 +502,9 @@ const Skills: React.FC = () => {
                         <motion.div
                             className="absolute w-[250px] h-[250px] pointer-events-none"
                             style={{
-                                top: '74%', 
+                                top: '55%', 
+                                // 🟢 APPLYING Y-AXIS ADJUSTMENT FROM DATA
+                                marginTop: `${hoveredSoftware.previewY || 0}px`,
                                 right: '15%',
                                 zIndex: 15,
                                 transformStyle: "preserve-3d",

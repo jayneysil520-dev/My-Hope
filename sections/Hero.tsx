@@ -1,3 +1,5 @@
+
+
 import React, { useRef, useState, useMemo } from 'react';
 import { motion, useTransform, useMotionValue, useSpring, useScroll } from 'framer-motion';
 import Spotlight3D from '../components/Spotlight3D';
@@ -14,13 +16,17 @@ const HERO_SCALE = 0.7;
 // 🟢 2. CARD SIZE: Base width for the cards
 const CARD_SIZE_CLASSES = "w-[240px] md:w-[300px]"; 
 
-// 🟢 3. CARD POSITIONS: Adjust 'left' (X) and 'top' (Y) for each card slot (1-5)
+// 🟢 3. CARD POSITIONS: Adjust 'left' (X) and 'top' (Y) for each card slot (1-8)
 const CARD_LAYOUT_CONFIG = [
     { left: '15%', top: '45%', zIndex: 10 }, // Card 1
     { left: '65%', top: '50%', zIndex: 12 }, // Card 2
     { left: '25%', top: '65%', zIndex: 14 }, // Card 3
     { left: '80%', top: '40%', zIndex: 8 },  // Card 4
     { left: '50%', top: '55%', zIndex: 15 }, // Card 5
+    // 🟢 NEW CARDS
+    { left: '8%', top: '25%', zIndex: 5 },   // Card 6 (Top Left)
+    { left: '85%', top: '65%', zIndex: 13 }, // Card 7 (Bottom Right)
+    { left: '42%', top: '15%', zIndex: 4 },  // Card 8 (Top Center)
 ];
 
 // --- DATA ---
@@ -30,7 +36,8 @@ const heroCards = [
       color: '#FF7F27', 
       rotate: -12, // 🟢 Adjust individual rotation here
       img: 'https://cdn.jsdelivr.net/gh/jayneysil520-dev/jayneysil@main/1.png',
-      scale: 1.15  // 🟢 Adjust individual scale here
+      // 🟢 SCALE PARAMETER: Change this value to resize specific cards (e.g. 1.2 = 120% size)
+      scale: 1.15  
   }, 
   { 
       id: 2, 
@@ -52,7 +59,36 @@ const heroCards = [
       scale: 0.9,
       img: 'https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/%E5%8D%AB%E5%B2%97/%E5%B0%81%E9%9D%A2%E5%9B%BE.png'
   }, 
-  { id: 5, color: '#FFCCAA', rotate: 5, scale: 1.0 }, 
+  { 
+      id: 5, 
+      color: '#FFCCAA', 
+      rotate: 5, 
+      scale: 1.0,
+      // Fallback pattern if no image, or can add image
+      img: 'https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/nezha/%E5%93%AA%E5%90%92%E6%B5%B7%E8%B4%BC%E7%8E%8B.png' 
+  }, 
+  // 🟢 NEW CARDS DATA
+  { 
+      id: 6, 
+      color: '#E0221E', 
+      rotate: 15, 
+      scale: 0.92,
+      img: 'https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/animation/%E8%A7%86%E9%A2%91%E5%B0%81%E9%9D%A2.png'
+  },
+  { 
+      id: 7, 
+      color: '#AA88EE', 
+      rotate: -8, 
+      scale: 1.1,
+      img: 'https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/animation/%E8%A7%86%E9%A2%91%E5%B0%81%E9%9D%A2.png'
+  },
+  { 
+      id: 8, 
+      color: '#4ECDC4', 
+      rotate: 20, 
+      scale: 0.88,
+      img: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=1000&auto=format&fit=crop'
+  }
 ];
 
 // --- DEPTH CONFIG ---
@@ -65,7 +101,7 @@ const DEPTHS = {
 
 // Wrapper component to handle individual hover state and random floating
 const FloatingHeroCard: React.FC<{ card: any, index: number, hasEntered: boolean }> = ({ card, index, hasEntered }) => {
-    const layout = CARD_LAYOUT_CONFIG[index];
+    const layout = CARD_LAYOUT_CONFIG[index] || { left: '50%', top: '50%', zIndex: 1 }; // Fallback
     const initialX = index % 2 === 0 ? -1500 : 1500;
     const [isHovered, setIsHovered] = useState(false);
 
@@ -93,7 +129,8 @@ const FloatingHeroCard: React.FC<{ card: any, index: number, hasEntered: boolean
             <motion.div
                 animate={{
                     y: isHovered ? -40 : [0, -randomOffset, 0],
-                    scale: isHovered ? card.scale * 1.05 : card.scale,
+                    // 🟢 SCALE APPLIED HERE:
+                    scale: isHovered ? (card.scale || 1) * 1.05 : (card.scale || 1),
                     rotate: isHovered ? 0 : [0, 1, -1, 0], 
                 }}
                 transition={{

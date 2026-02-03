@@ -1,5 +1,4 @@
 
-
 import React, { useState, useRef, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence, useTransform, useMotionValue, useSpring, useScroll, useMotionTemplate, Variants } from 'framer-motion';
 import { createPortal } from 'react-dom'; 
@@ -52,8 +51,165 @@ const DEPTHS = {
 
 // --- COMPONENTS ---
 
+// 🟢 NEW: Component for Project 2 Video Interaction (Flip to Play)
+// Updated to be an Absolute Overlay (Fixed relative to Modal)
+const Project2FlipVideo: React.FC<{ config: any }> = ({ config }) => {
+    const [isFlipped, setIsFlipped] = useState(false);
+    const [isHidden, setIsHidden] = useState(false); // 🟢 NEW: Hidden State
+    const videoRef = useRef<HTMLVideoElement>(null);
+    const justHiddenRef = useRef(false); // 🟢 NEW: Prevents instant restore on hover
+
+    const handleFlip = (e: React.MouseEvent) => {
+        // Prevent flip if we just clicked hidden (double safety)
+        if (justHiddenRef.current) return;
+
+        e.stopPropagation();
+        if (isHidden) return;
+        setIsFlipped(true);
+    };
+
+    const handleClose = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        setIsFlipped(false);
+        if (videoRef.current) {
+            videoRef.current.pause();
+            videoRef.current.currentTime = 0;
+        }
+    };
+
+    // 🟢 NEW: Handle Hide Click Robustly
+    const handleHide = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        e.nativeEvent.stopImmediatePropagation();
+        
+        justHiddenRef.current = true;
+        setIsHidden(true);
+        
+        // Reset the block after 500ms so user can restore it intentionally by re-entering
+        setTimeout(() => {
+            justHiddenRef.current = false;
+        }, 500);
+    };
+
+    useEffect(() => {
+        if (isFlipped && videoRef.current) {
+             window.dispatchEvent(new Event('pause-background-music'));
+             videoRef.current.play().catch(err => console.log('Auto play video failed', err));
+        }
+    }, [isFlipped]);
+
+    return (
+        // 🟢 ABSOLUTE POSITIONING (Overlay Layer)
+        <div className="absolute top-0 left-0 w-full h-full flex justify-center pointer-events-none z-[60]">
+            <motion.div
+                className="relative pointer-events-auto group"
+                initial={{ y: 400 }} 
+                animate={{ 
+                    width: isFlipped ? 960 : (isHidden ? 50 : 120), // Shrink when hidden
+                    height: isFlipped ? 540 : (isHidden ? 50 : 120),
+                    rotateY: isFlipped ? 180 : 0,
+                    // 🟢 POSITION LOGIC:
+                    // Flipped: y=140
+                    // Hidden: y=80, x=-440 (Top Left)
+                    // Normal: y=400, x=0
+                    y: isFlipped ? 140 : (isHidden ? 80 : 400),
+                    x: isFlipped ? 0 : (isHidden ? -440 : 0),
+                    opacity: isHidden ? 0.6 : 1
+                }}
+                transition={{ type: "spring", stiffness: 60, damping: 14 }}
+                style={{ transformStyle: "preserve-3d" }}
+                // 🟢 RESTORE ON HOVER
+                onMouseEnter={() => {
+                    // Only restore if hidden AND not just hidden
+                    if (isHidden && !justHiddenRef.current) setIsHidden(false);
+                }}
+            >
+                {/* 1. FRONT FACE (Play Button) */}
+                <div 
+                    className="absolute inset-0 backface-hidden"
+                    style={{ backfaceVisibility: 'hidden' }}
+                >
+                    {/* CLICKABLE PLAY AREA */}
+                    <div 
+                        className="absolute inset-0 flex items-center justify-center cursor-pointer"
+                        onClick={handleFlip}
+                    >
+                        <motion.div 
+                            whileHover={{ scale: 1.1 }}
+                            className="w-full h-full rounded-full bg-white/20 backdrop-blur-xl border border-white/50 flex items-center justify-center shadow-[0_20px_40px_rgba(0,0,0,0.2)]"
+                        >
+                            {/* 🟢 BUTTON COLOR: #D40411 */}
+                            <div className={`rounded-full bg-white text-[#D40411] flex items-center justify-center shadow-inner transition-all duration-300 ${isHidden ? 'w-8 h-8' : 'w-16 h-16 group-hover:scale-110'}`}>
+                                <svg width={isHidden ? "14" : "24"} height={isHidden ? "14" : "24"} viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                                    <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                                </svg>
+                            </div>
+                            
+                            {/* Pulse Ring (Hidden when minimized) */}
+                            {!isHidden && (
+                                <div className="absolute inset-0 rounded-full border border-white/40 animate-ping opacity-20" />
+                            )}
+                        </motion.div>
+                    </div>
+
+                    {/* INDEPENDENT CLOSE BUTTON AREA */}
+                    {/* Rendered conditionally and positioned absolutely on top */}
+                    {!isFlipped && !isHidden && (
+                        <div 
+                            className="absolute -top-3 -right-3 w-10 h-10 z-[100] flex items-center justify-center cursor-pointer pointer-events-auto opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                            onClick={handleHide}
+                            onMouseDown={(e) => e.stopPropagation()}
+                        >
+                            <motion.div
+                                className="w-8 h-8 bg-white text-gray-500 hover:bg-gray-200 border border-gray-200 rounded-full flex items-center justify-center shadow-md"
+                                whileHover={{ scale: 1.1 }}
+                                whileTap={{ scale: 0.9 }}
+                            >
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                </svg>
+                            </motion.div>
+                        </div>
+                    )}
+                </div>
+
+                {/* 2. BACK FACE (Video Player) */}
+                <div 
+                    className="absolute inset-0 backface-hidden rounded-2xl overflow-hidden bg-black shadow-2xl border border-white/20"
+                    style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
+                >
+                    <video 
+                        ref={videoRef}
+                        src={config.videoUrl}
+                        className="w-full h-full object-cover"
+                        controls
+                    />
+                    
+                    {/* Close Video Button */}
+                    <button 
+                        onClick={handleClose}
+                        className="absolute top-4 right-4 w-10 h-10 bg-black/50 hover:bg-[#D40411] text-white rounded-full flex items-center justify-center backdrop-blur-md transition-colors border border-white/10 z-20 shadow-lg"
+                    >
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+            </motion.div>
+        </div>
+    );
+};
+
 // 🟢 NEW: Flip Card Component for Project 6 (Updated with Dynamic Size)
-const FlipVideoCard: React.FC<{ item: any; index: number; color: string }> = ({ item, index, color }) => {
+const FlipVideoCard: React.FC<{ 
+    item: any; 
+    index: number; 
+    color: string;
+    activeVideoIndex: number | null; // 🟢 NEW: To track which video has sound
+    setActiveVideoIndex: (idx: number) => void; // 🟢 NEW: To set active video
+}> = ({ item, index, color, activeVideoIndex, setActiveVideoIndex }) => {
     const [isFlipped, setIsFlipped] = useState(false);
     const videoRef = useRef<HTMLVideoElement>(null);
     const cardRef = useRef<HTMLDivElement>(null);
@@ -70,13 +226,26 @@ const FlipVideoCard: React.FC<{ item: any; index: number; color: string }> = ({ 
     // Auto-play video when flipped
     useEffect(() => {
         if (isFlipped && videoRef.current) {
-            // 🟢 Play Video with Sound (muted={false} in JSX below)
+            // 🟢 1. Trigger Global Music Pause
+            window.dispatchEvent(new Event('pause-background-music'));
+
+            // 🟢 2. Set THIS card as the active audio source
+            setActiveVideoIndex(index);
+
             videoRef.current.currentTime = 0;
             videoRef.current.play().catch(e => console.log("Video play failed", e));
         } else if (!isFlipped && videoRef.current) {
             videoRef.current.pause();
         }
     }, [isFlipped]);
+
+    // 🟢 3. Audio Exclusion Logic: Only the active index gets sound, others are muted
+    useEffect(() => {
+        if (videoRef.current) {
+            // If I am the active index, unmute. Else, mute.
+            videoRef.current.muted = activeVideoIndex !== index;
+        }
+    }, [activeVideoIndex, index]);
 
     // 🟢 DYNAMIC SIZING LOGIC
     // Use flippedWidth/Height if available and flipped, otherwise fallback to default dimensions
@@ -180,12 +349,10 @@ const FlipVideoCard: React.FC<{ item: any; index: number; color: string }> = ({ 
                         src={item.video} 
                         className="w-full h-full object-cover"
                         loop
-                        // 🟢 ENABLED SOUND (removed muted attribute)
                         playsInline
+                        // Muted state is controlled via useEffect above
                     />
-                    <div className="absolute bottom-6 left-6">
-                        <span className="text-white font-albert-bold text-lg drop-shadow-md">{item.title}</span>
-                    </div>
+                    {/* 🟢 REMOVED TITLE DIV AS REQUESTED */}
                 </div>
             </motion.div>
         </motion.div>
@@ -195,6 +362,7 @@ const FlipVideoCard: React.FC<{ item: any; index: number; color: string }> = ({ 
 // 🟢 NEW: Horizontal Scroll Gallery Component
 const HorizontalScrollGallery: React.FC<{ items: any[]; parentScrollRef: React.RefObject<HTMLDivElement>; color: string }> = ({ items, parentScrollRef, color }) => {
     const targetRef = useRef<HTMLDivElement>(null);
+    const [activeVideoIndex, setActiveVideoIndex] = useState<number | null>(null); // 🟢 Track which video is making sound
     
     // Use the scrolling of the main modal container (parentScrollRef) to drive this animation
     const { scrollYProgress } = useScroll({
@@ -223,7 +391,14 @@ const HorizontalScrollGallery: React.FC<{ items: any[]; parentScrollRef: React.R
                      </div>
                      
                      {items.map((item, index) => (
-                          <FlipVideoCard key={item.id} item={item} index={index} color={color} />
+                          <FlipVideoCard 
+                            key={item.id} 
+                            item={item} 
+                            index={index} 
+                            color={color}
+                            activeVideoIndex={activeVideoIndex}
+                            setActiveVideoIndex={setActiveVideoIndex} 
+                          />
                      ))}
                      
                      {/* End Spacer */}
@@ -685,229 +860,242 @@ const GalleryModalView: React.FC<{ images: string[], projectId?: number, project
     }
 
     return (
-        <div
-            ref={scrollContainerRef}
-            onScroll={handleScroll}
-            onMouseMove={handleMouseMove}
-            className="w-full h-full overflow-y-auto overflow-x-hidden floating-scrollbar relative z-10 p-0 bg-black"
-        >
-            {/* Real-time Indicator: Scroll Y & Mouse X */}
-            <div className="fixed top-24 right-10 z-[70] font-mono text-[10px] text-green-400 bg-black/80 backdrop-blur-md px-3 py-2 rounded border border-green-500/30 pointer-events-none tracking-widest flex flex-col gap-1 shadow-lg">
-                <span className="flex justify-between gap-4"><span>SCROLL Y:</span> <span>{scrollVal}</span></span>
-                <span className="flex justify-between gap-4"><span>MOUSE X:</span> <span>{mouseVal}</span></span>
-            </div>
+        // 🟢 MODAL CONTENT WRAPPER
+        <div className="relative w-full h-full bg-black">
+            
+            {/* 🟢 FIXED LAYER: Project 2 Video Interaction */}
+            {/* Placed OUTSIDE the scrollable area, as an absolute overlay, to prevent scrolling */}
+            {projectId === 2 && project?.project2Config?.videoInteraction && (
+                 <Project2FlipVideo config={project.project2Config.videoInteraction} />
+            )}
 
-            <div 
-                className="flex flex-col w-full relative"
-                style={{ 
-                    // Project 1 needs specific height for absolute elements (max Y is ~10420px)
-                    minHeight: projectId === 1 ? '11000px' : 'auto' 
-                }}
+            {/* 🟢 SCROLLABLE AREA */}
+            <div
+                ref={scrollContainerRef}
+                onScroll={handleScroll}
+                onMouseMove={handleMouseMove}
+                className="w-full h-full overflow-y-auto overflow-x-hidden floating-scrollbar relative z-10 p-0"
             >
-                
-                {projectId === 1 && project?.sequenceConfig1 ? (
-                    <>
-                        {/* 1. First Image */}
-                        {images[0] && (
-                            <div className="w-full bg-black">
-                                <img src={images[0]} className="w-full h-auto block" loading="lazy" decoding="async" alt="P1 Part 1" />
+                {/* Real-time Indicator: Scroll Y & Mouse X */}
+                <div className="fixed top-24 right-10 z-[70] font-mono text-[10px] text-green-400 bg-black/80 backdrop-blur-md px-3 py-2 rounded border border-green-500/30 pointer-events-none tracking-widest flex flex-col gap-1 shadow-lg">
+                    <span className="flex justify-between gap-4"><span>SCROLL Y:</span> <span>{scrollVal}</span></span>
+                    <span className="flex justify-between gap-4"><span>MOUSE X:</span> <span>{mouseVal}</span></span>
+                </div>
+
+                <div 
+                    className="flex flex-col w-full relative"
+                    style={{ 
+                        // Project 1 needs specific height for absolute elements (max Y is ~10420px)
+                        minHeight: projectId === 1 ? '11000px' : 'auto' 
+                    }}
+                >
+                    
+                    {projectId === 1 && project?.sequenceConfig1 ? (
+                        <>
+                            {/* 1. First Image */}
+                            {images[0] && (
+                                <div className="w-full bg-black">
+                                    <img src={images[0]} className="w-full h-auto block" loading="lazy" decoding="async" alt="P1 Part 1" />
+                                </div>
+                            )}
+                            
+                            {/* 2. Second Image */}
+                            {images[1] && (
+                                <div className="w-full bg-black">
+                                    <img src={images[1]} className="w-full h-auto block" loading="lazy" decoding="async" alt="P1 Part 2" />
+                                </div>
+                            )}
+                            
+                            {/* 3. SCROLL SEQUENCE */}
+                            <ScrollImageSequence config={project.sequenceConfig1} scrollContainerRef={scrollContainerRef} />
+                            
+                            {/* 4. Third Image */}
+                            {images[2] && (
+                                <div className="w-full bg-black">
+                                    <img src={images[2]} className="w-full h-auto block" loading="lazy" decoding="async" alt="P1 Part 3" />
+                                </div>
+                            )}
+                        </>
+                    ) : projectId === 2 && project?.project2Config ? (
+                        // 🟢 PROJECT 2 UPDATED LOGIC: Full Width Stack
+                        <div className="relative w-full bg-black flex flex-col items-center">
+                            {/* Phone Overlay (Sticky or Absolute on top) */}
+                            {project.project2Config.phoneImage && (
+                                <div 
+                                    className="absolute z-20 pointer-events-none mix-blend-normal"
+                                    style={{
+                                        top: `${project.project2Config.phoneImage.y ?? 100}px`,
+                                        left: `${project.project2Config.phoneImage.x ?? 650}px`,
+                                        width: `${project.project2Config.phoneImage.width ?? 280}px`
+                                    }}
+                                >
+                                    <img 
+                                        src={project.project2Config.phoneImage.url} 
+                                        alt="Phone" 
+                                        className="w-full h-auto drop-shadow-2xl"
+                                    />
+                                </div>
+                            )}
+
+                            {/* 🟢 NOTE: Video Interaction was moved to the fixed layer above */}
+
+                            {/* 8 Existing Cards - Now Full Width Stack */}
+                            <div className="w-full flex flex-col relative z-10">
+                                {project.project2Config.cards && project.project2Config.cards.map((card: any) => {
+                                    // 🟢 ANIMATION LOGIC: Cards 3-7 (Indices 2-6)
+                                    const shouldAnimate = card.id >= 3 && card.id <= 7;
+                                    const finalY = card.y ?? 0;
+
+                                    return (
+                                        <motion.img 
+                                            key={card.id}
+                                            src={card.url} 
+                                            alt={`Card ${card.id}`}
+                                            className="w-full h-auto block relative"
+                                            loading="lazy"
+                                            // Animation Properties
+                                            // Start state: offset 150px lower (closer to scroll bottom) and invisible
+                                            initial={{ 
+                                                opacity: shouldAnimate ? 0 : 1, 
+                                                y: shouldAnimate ? finalY + 150 : finalY 
+                                            }}
+                                            // End state: move to final position and fade in when in view
+                                            whileInView={shouldAnimate ? { opacity: 1, y: finalY } : undefined}
+                                            // Trigger slightly before element is fully in view (-100px margin)
+                                            viewport={{ once: true, margin: "-100px" }}
+                                            transition={{ duration: 0.8, ease: "easeOut" }}
+                                        />
+                                    );
+                                })}
                             </div>
-                        )}
-                        
-                        {/* 2. Second Image */}
-                        {images[1] && (
-                            <div className="w-full bg-black">
-                                <img src={images[1]} className="w-full h-auto block" loading="lazy" decoding="async" alt="P1 Part 2" />
-                            </div>
-                        )}
-                        
-                        {/* 3. SCROLL SEQUENCE */}
-                        <ScrollImageSequence config={project.sequenceConfig1} scrollContainerRef={scrollContainerRef} />
-                        
-                        {/* 4. Third Image */}
-                        {images[2] && (
-                            <div className="w-full bg-black">
-                                <img src={images[2]} className="w-full h-auto block" loading="lazy" decoding="async" alt="P1 Part 3" />
-                            </div>
-                        )}
-                    </>
-                ) : projectId === 2 && project?.project2Config ? (
-                    // 🟢 PROJECT 2 UPDATED LOGIC: Full Width Stack
-                    <div className="relative w-full bg-black flex flex-col items-center">
-                        {/* Phone Overlay (Sticky or Absolute on top) */}
-                        {project.project2Config.phoneImage && (
-                            <div 
-                                className="absolute z-20 pointer-events-none mix-blend-normal"
-                                style={{
-                                    top: `${project.project2Config.phoneImage.y ?? 100}px`,
-                                    left: `${project.project2Config.phoneImage.x ?? 650}px`,
-                                    width: `${project.project2Config.phoneImage.width ?? 280}px`
-                                }}
-                            >
+                        </div>
+                    ) : (
+                        // Default rendering for other projects
+                        images.map((imgUrl, index) => (
+                            <div key={index} className="w-full bg-black">
                                 <img 
-                                    src={project.project2Config.phoneImage.url} 
-                                    alt="Phone" 
-                                    className="w-full h-auto drop-shadow-2xl"
+                                    src={imgUrl} 
+                                    className="w-full h-auto block" 
+                                    loading="lazy" 
+                                    decoding="async" 
+                                    alt={`Project Detail ${index + 1}`} 
                                 />
                             </div>
-                        )}
+                        ))
+                    )}
 
-                        {/* 8 Existing Cards - Now Full Width Stack */}
-                        <div className="w-full flex flex-col relative z-10">
-                            {project.project2Config.cards && project.project2Config.cards.map((card: any) => {
-                                // 🟢 ANIMATION LOGIC: Cards 3-7 (Indices 2-6)
-                                const shouldAnimate = card.id >= 3 && card.id <= 7;
-                                const finalY = card.y ?? 0;
+                    {/* --- CUSTOM OVERLAY TEXTS FOR PROJECT 1 --- */}
+                    {projectId === 1 && (
+                        <>
+                            {/* TEXT OVERLAYS REMOVED AS REQUESTED */}
 
-                                return (
-                                    <motion.img 
-                                        key={card.id}
-                                        src={card.url} 
-                                        alt={`Card ${card.id}`}
-                                        className="w-full h-auto block relative"
-                                        loading="lazy"
-                                        // Animation Properties
-                                        // Start state: offset 150px lower (closer to scroll bottom) and invisible
-                                        initial={{ 
-                                            opacity: shouldAnimate ? 0 : 1, 
-                                            y: shouldAnimate ? finalY + 150 : finalY 
-                                        }}
-                                        // End state: move to final position and fade in when in view
-                                        whileInView={shouldAnimate ? { opacity: 1, y: finalY } : undefined}
-                                        // Trigger slightly before element is fully in view (-100px margin)
-                                        viewport={{ once: true, margin: "-100px" }}
-                                        transition={{ duration: 0.8, ease: "easeOut" }}
-                                    />
-                                );
-                            })}
-                        </div>
-                    </div>
-                ) : (
-                    // Default rendering for other projects
-                    images.map((imgUrl, index) => (
-                        <div key={index} className="w-full bg-black">
-                            <img 
-                                src={imgUrl} 
-                                className="w-full h-auto block" 
-                                loading="lazy" 
-                                decoding="async" 
-                                alt={`Project Detail ${index + 1}`} 
-                            />
-                        </div>
-                    ))
-                )}
+                            {/* --- 6. NEW: GROUP 1 CARDS (Updated with Hover Effects) --- */}
+                            {GROUP_1_CARDS_DATA.map(card => (
+                                <HoverCard 
+                                    key={card.id}
+                                    img={card.img}
+                                    style={{
+                                        position: 'absolute',
+                                        top: `${card.yOffset}px`,
+                                        left: '50%',
+                                        marginLeft: `${card.xOffset}px`,
+                                        width: `${card.width}px`,
+                                        height: `${card.height}px`,
+                                    }}
+                                    borderRadius={card.borderRadius}
+                                    baseRotate={card.rotate}
+                                    popOnHover={true}
+                                />
+                            ))}
 
-                {/* --- CUSTOM OVERLAY TEXTS FOR PROJECT 1 --- */}
-                {projectId === 1 && (
-                    <>
-                        {/* TEXT OVERLAYS REMOVED AS REQUESTED */}
-
-                        {/* --- 6. NEW: GROUP 1 CARDS (Updated with Hover Effects) --- */}
-                        {GROUP_1_CARDS_DATA.map(card => (
-                            <HoverCard 
-                                key={card.id}
-                                img={card.img}
-                                style={{
-                                    position: 'absolute',
-                                    top: `${card.yOffset}px`,
-                                    left: '50%',
-                                    marginLeft: `${card.xOffset}px`,
-                                    width: `${card.width}px`,
-                                    height: `${card.height}px`,
-                                }}
-                                borderRadius={card.borderRadius}
-                                baseRotate={card.rotate}
-                                popOnHover={true}
-                            />
-                        ))}
-
-                        {/* --- 7. NEW: WAVE IMAGES --- */}
-                        {WAVE_IMAGES_CONFIG.map((item, idx) => (
-                            <motion.img
-                                key={idx}
-                                src={item.url}
-                                style={{
-                                    position: 'absolute',
-                                    top: `${item.y}px`,
-                                    left: '50%',
-                                    marginLeft: `${item.x}px`,
-                                    width: `${item.width}px`,
-                                    zIndex: item.zIndex
-                                }}
-                                initial={{ opacity: 0, y: 50 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                transition={{ delay: item.delay, duration: 0.8 }}
-                                alt="Wave"
-                            />
-                        ))}
-
-                        {/* --- 8. NEW: FOX RABBIT --- */}
-                        {CUSTOM_FOX_RABBIT_CONFIG.map((item, idx) => (
-                            <motion.div
-                                key={idx}
-                                style={{
-                                    position: 'absolute',
-                                    top: `${item.y}px`,
-                                    left: '50%',
-                                    marginLeft: '-375px', // Center correction for 750px width (half of 750)
-                                    width: '750px', 
-                                    height: 'auto',
-                                    zIndex: item.zIndex
-                                }}
-                            >
+                            {/* --- 7. NEW: WAVE IMAGES --- */}
+                            {WAVE_IMAGES_CONFIG.map((item, idx) => (
                                 <motion.img
+                                    key={idx}
                                     src={item.url}
                                     style={{
                                         position: 'absolute',
-                                        // User provided X is likely offset from center or absolute left, 
-                                        // keeping your specific structure logic here:
-                                        left: 0, 
+                                        top: `${item.y}px`,
+                                        left: '50%',
+                                        marginLeft: `${item.x}px`,
                                         width: `${item.width}px`,
+                                        zIndex: item.zIndex
                                     }}
-                                    initial={{ opacity: 0, scale: 0.95 }}
-                                    whileInView={{ opacity: 1, scale: 1 }}
-                                    transition={{ duration: 1 }}
-                                    alt="Fox"
-                                />
-                            </motion.div>
-                        ))}
-
-                        {/* --- 9. NEW: CUSTOM SCATTERED IMAGES (d1-d4) Updated with Hover Effects --- */}
-                         <motion.div
-                            style={{
-                                position: 'absolute',
-                                top: '0',
-                                left: '50%',
-                                marginLeft: '-750px', // Assume coordinates are based on a 1500px canvas center
-                                width: '1500px',
-                                height: '1px', 
-                                pointerEvents: 'none',
-                                zIndex: 10
-                            }}
-                        >
-                            {CUSTOM_NEW_IMAGES.map((img) => (
-                                <HoverCard 
-                                    key={img.id}
-                                    img={img.img}
-                                    style={{
-                                        position: 'absolute',
-                                        top: `${img.y}px`,
-                                        left: `${img.x}px`,
-                                        width: `${img.w}px`,
-                                        height: `${img.h}px`,
-                                        pointerEvents: 'auto'
-                                    }}
-                                    baseRotate={img.r}
-                                    popOnHover={false}
+                                    initial={{ opacity: 0, y: 50 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: item.delay, duration: 0.8 }}
+                                    alt="Wave"
                                 />
                             ))}
-                        </motion.div>
 
-                    </>
-                )}
+                            {/* --- 8. NEW: FOX RABBIT --- */}
+                            {CUSTOM_FOX_RABBIT_CONFIG.map((item, idx) => (
+                                <motion.div
+                                    key={idx}
+                                    style={{
+                                        position: 'absolute',
+                                        top: `${item.y}px`,
+                                        left: '50%',
+                                        marginLeft: '-375px', // Center correction for 750px width (half of 750)
+                                        width: '750px', 
+                                        height: 'auto',
+                                        zIndex: item.zIndex
+                                    }}
+                                >
+                                    <motion.img
+                                        src={item.url}
+                                        style={{
+                                            position: 'absolute',
+                                            // User provided X is likely offset from center or absolute left, 
+                                            // keeping your specific structure logic here:
+                                            left: 0, 
+                                            width: `${item.width}px`,
+                                        }}
+                                        initial={{ opacity: 0, scale: 0.95 }}
+                                        whileInView={{ opacity: 1, scale: 1 }}
+                                        transition={{ duration: 1 }}
+                                        alt="Fox"
+                                    />
+                                </motion.div>
+                            ))}
 
-                <div className="w-full py-32 text-center bg-black">
-                    <p className="text-white/30 text-sm">End of Project Gallery</p>
+                            {/* --- 9. NEW: CUSTOM SCATTERED IMAGES (d1-d4) Updated with Hover Effects --- */}
+                            <motion.div
+                                style={{
+                                    position: 'absolute',
+                                    top: '0',
+                                    left: '50%',
+                                    marginLeft: '-750px', // Assume coordinates are based on a 1500px canvas center
+                                    width: '1500px',
+                                    height: '1px', 
+                                    pointerEvents: 'none',
+                                    zIndex: 10
+                                }}
+                            >
+                                {CUSTOM_NEW_IMAGES.map((img) => (
+                                    <HoverCard 
+                                        key={img.id}
+                                        img={img.img}
+                                        style={{
+                                            position: 'absolute',
+                                            top: `${img.y}px`,
+                                            left: `${img.x}px`,
+                                            width: `${img.w}px`,
+                                            height: `${img.h}px`,
+                                            pointerEvents: 'auto'
+                                        }}
+                                        baseRotate={img.r}
+                                        popOnHover={false}
+                                    />
+                                ))}
+                            </motion.div>
+
+                        </>
+                    )}
+
+                    <div className="w-full py-32 text-center bg-black">
+                        <p className="text-white/30 text-sm">End of Project Gallery</p>
+                    </div>
                 </div>
             </div>
         </div>

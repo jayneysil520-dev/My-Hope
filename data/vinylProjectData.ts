@@ -1,5 +1,4 @@
 
-
 // 🔒 LOCKED DATA: USER CONFIGURATION
 // Please do not overwrite this file with placeholder data in future updates.
 
@@ -164,7 +163,12 @@ export const PROJECTS_DATA = [
             { id: 6, url: 'https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/%E8%9B%8B%E4%BB%94%E6%B4%BE%E5%AF%B9/%E5%8D%A1%E7%89%876.png', y: -1400 },
             { id: 7, url: 'https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/%E8%9B%8B%E4%BB%94%E6%B4%BE%E5%AF%B9/%E5%8D%A1%E7%89%877.png', y: -1600 },
             { id: 8, url: 'https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/%E8%9B%8B%E4%BB%94%E6%B4%BE%E5%AF%B9/%E5%8D%A1%E7%89%878.png', y: -2000 },
-        ]
+        ],
+        // 🟢 NEW: Video Interaction Configuration
+        videoInteraction: {
+            y: 400, // Position Y from top
+            videoUrl:'https://7picw4yc54rlegc8.public.blob.vercel-storage.com/%E8%9B%8B%E4%BB%94%E6%B4%BE%E5%AF%B9.mp4'
+        }
       },
       detailImages: [], // Fallback/Empty as we use project2Config
   },
@@ -201,7 +205,11 @@ export const PROJECTS_DATA = [
       color: '#E0221E', 
       img: 'https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/nezha/%E5%93%AA%E5%90%92%E6%B5%B7%E8%B4%BC%E7%8E%8B.png', 
       desc: 'Smart home interface connecting organic patterns with digital control.',
-      tools: ['AI', 'Figma']
+      tools: ['AI', 'Figma'],
+      layout: 'gallery',
+      detailImages: [
+          'https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/nezha/%E5%93%AA%E5%90%92%E6%B5%B7%E8%B4%BC%E7%8E%8B%E9%95%BF.png'
+      ]
   },
   { 
       id: 6, 
@@ -218,7 +226,7 @@ export const PROJECTS_DATA = [
           {
               id: 1,
               img: 'https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/animation/2%20(1).png', 
-              video: 'https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/animation/WeChat_20250326215246.mp4',
+              video: 'https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/animation/daily.MP4',
               title: 'Daily of designer',
               // 🟢 USER CONFIGURATION: Card Size & Position
               width: 320, 
@@ -309,7 +317,7 @@ export const PROJECTS_DATA = [
       label: 'Personal Gallery', 
       year: '2021-2025', 
       color: '#4ECDC4', 
-      img: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=1000&auto=format&fit=crop', 
+      img: 'https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/animation/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_2026-02-02_223917_470.jpg', 
       desc: 'A collection of personal experiments and visual explorations.', 
       tools: ['Blender', 'PS', 'AI'], 
       layout: 'gallery',
