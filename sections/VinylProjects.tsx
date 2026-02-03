@@ -52,16 +52,13 @@ const DEPTHS = {
 
 // --- COMPONENTS ---
 
-// 🟢 NEW: Flip Card Component for Project 6 (Updated with Hover Effect, Custom Size & Radius)
+// 🟢 NEW: Flip Card Component for Project 6 (Updated with Dynamic Size)
 const FlipVideoCard: React.FC<{ item: any; index: number; color: string }> = ({ item, index, color }) => {
     const [isFlipped, setIsFlipped] = useState(false);
     const videoRef = useRef<HTMLVideoElement>(null);
     const cardRef = useRef<HTMLDivElement>(null);
     const mouseX = useMotionValue(0);
     const mouseY = useMotionValue(0);
-
-    // 🟢 EXTRACT BORDER RADIUS OR DEFAULT TO 24px
-    const radius = item.borderRadius ? `${item.borderRadius}px` : '24px';
 
     const handleMouseMove = ({ clientX, clientY }: React.MouseEvent) => {
         if (!cardRef.current) return;
@@ -73,6 +70,7 @@ const FlipVideoCard: React.FC<{ item: any; index: number; color: string }> = ({ 
     // Auto-play video when flipped
     useEffect(() => {
         if (isFlipped && videoRef.current) {
+            // 🟢 Play Video with Sound (muted={false} in JSX below)
             videoRef.current.currentTime = 0;
             videoRef.current.play().catch(e => console.log("Video play failed", e));
         } else if (!isFlipped && videoRef.current) {
@@ -80,31 +78,46 @@ const FlipVideoCard: React.FC<{ item: any; index: number; color: string }> = ({ 
         }
     }, [isFlipped]);
 
+    // 🟢 DYNAMIC SIZING LOGIC
+    // Use flippedWidth/Height if available and flipped, otherwise fallback to default dimensions
+    const currentWidth = isFlipped ? (item.flippedWidth || item.width || 320) : (item.width || 320);
+    const currentHeight = isFlipped ? (item.flippedHeight || item.height || 569) : (item.height || 569);
+
     return (
-        <div 
+        <motion.div 
             ref={cardRef}
             className="relative shrink-0 perspective-1000 cursor-pointer group"
             style={{ 
-                // 🟢 USER CONFIGURATION: "Thrown" Effect Logic
-                width: item.width || '320px', 
-                height: item.height || '569px',
-                
-                // Allow overlapping (negative margins)
-                marginLeft: `${item.marginLeft || 0}px`, 
-                
-                // Z-Index for stacking order
-                zIndex: item.zIndex || 1,
-
-                // Combine Transform: Scale + Rotate + Vertical Offset
-                transform: `
-                    scale(${item.scale || 1}) 
-                    rotate(${item.rotation || 0}deg) 
-                    translateY(${item.y || 0}px)
-                `
+                marginTop: item.y ? `${item.y}px` : '0px',
+                transform: `scale(${item.scale || 1})`
             }}
+            // Animate container dimensions
+            animate={{ width: currentWidth, height: currentHeight }}
+            transition={{ type: "spring", stiffness: 60, damping: 12 }}
             onMouseMove={handleMouseMove}
             onClick={() => setIsFlipped(!isFlipped)}
         >
+             {/* 🟢 NEW: INTRO TEXT (Rendered outside the flipping container but inside the relative wrapper) */}
+             {item.introConfig && (
+                <div 
+                    className="absolute pointer-events-none z-0 hidden md:block" 
+                    style={{
+                        left: `${item.introConfig.x}px`,
+                        top: `${item.introConfig.y}px`,
+                        width: item.introConfig.width || '200px',
+                        transform: `rotate(${item.introConfig.rotate || 0}deg)`,
+                        textAlign: (item.introConfig.align as any) || 'right'
+                    }}
+                >
+                    <p 
+                        className="font-albert-light text-white/70 whitespace-pre-line leading-relaxed"
+                        style={{ fontSize: item.introConfig.fontSize || '14px' }}
+                    >
+                        {item.introConfig.text}
+                    </p>
+                </div>
+            )}
+
             <motion.div
                 className="w-full h-full relative"
                 initial={false}
@@ -114,14 +127,13 @@ const FlipVideoCard: React.FC<{ item: any; index: number; color: string }> = ({ 
             >
                 {/* --- FRONT: IMAGE --- */}
                 <div 
-                    className="absolute inset-0 backface-hidden overflow-hidden bg-white shadow-xl border border-white/20"
-                    style={{ backfaceVisibility: 'hidden', borderRadius: radius }}
+                    className="absolute inset-0 backface-hidden rounded-3xl overflow-hidden bg-white shadow-xl border border-white/20"
+                    style={{ backfaceVisibility: 'hidden' }}
                 >
                     {/* 🟢 HOVER EFFECT: Spotlight Gradient Layer */}
                     <motion.div
-                        className="absolute -inset-[1px] z-10 opacity-0 group-hover:opacity-50 transition-opacity duration-300 pointer-events-none"
+                        className="absolute -inset-[1px] rounded-[2rem] z-10 opacity-0 group-hover:opacity-50 transition-opacity duration-300 pointer-events-none"
                         style={{
-                            borderRadius: radius,
                             background: color,
                             maskImage: useMotionTemplate`radial-gradient(300px circle at ${mouseX}px ${mouseY}px, black, transparent)`,
                             WebkitMaskImage: useMotionTemplate`radial-gradient(300px circle at ${mouseX}px ${mouseY}px, black, transparent)`,
@@ -130,8 +142,8 @@ const FlipVideoCard: React.FC<{ item: any; index: number; color: string }> = ({ 
                     
                     {/* 🟢 HOVER EFFECT: Glow Background */}
                     <div 
-                        className="absolute inset-0 blur-md opacity-0 group-hover:opacity-30 transition-all duration-500 z-0"
-                        style={{ backgroundColor: color, borderRadius: radius }}
+                        className="absolute inset-0 rounded-3xl blur-md opacity-0 group-hover:opacity-30 transition-all duration-500 z-0"
+                        style={{ backgroundColor: color }}
                     />
 
                     {/* Image */}
@@ -157,11 +169,10 @@ const FlipVideoCard: React.FC<{ item: any; index: number; color: string }> = ({ 
 
                 {/* --- BACK: VIDEO --- */}
                 <div 
-                    className="absolute inset-0 backface-hidden overflow-hidden bg-black shadow-xl border border-white/10"
+                    className="absolute inset-0 backface-hidden rounded-3xl overflow-hidden bg-black shadow-xl border border-white/10"
                     style={{ 
                         backfaceVisibility: 'hidden', 
-                        transform: 'rotateY(180deg)',
-                        borderRadius: radius 
+                        transform: 'rotateY(180deg)' 
                     }}
                 >
                     <video 
@@ -169,7 +180,7 @@ const FlipVideoCard: React.FC<{ item: any; index: number; color: string }> = ({ 
                         src={item.video} 
                         className="w-full h-full object-cover"
                         loop
-                        muted
+                        // 🟢 ENABLED SOUND (removed muted attribute)
                         playsInline
                     />
                     <div className="absolute bottom-6 left-6">
@@ -177,7 +188,7 @@ const FlipVideoCard: React.FC<{ item: any; index: number; color: string }> = ({ 
                     </div>
                 </div>
             </motion.div>
-        </div>
+        </motion.div>
     );
 };
 
@@ -193,27 +204,30 @@ const HorizontalScrollGallery: React.FC<{ items: any[]; parentScrollRef: React.R
     });
 
     // Map vertical scroll (0 to 1) to horizontal movement
-    // Adjust the "end" percentage based on number of items. e.g. -75% for 4 items depending on viewport width
+    // Adjust the "end" percentage based on number of items + gap.
     const x = useTransform(scrollYProgress, [0, 1], ["0%", "-65%"]);
 
     return (
-        <div ref={targetRef} className="relative h-[300vh]"> {/* Large height to allow scroll time */}
-             <div className="sticky top-0 h-screen flex items-center overflow-hidden bg-black/95">
-                 <motion.div style={{ x }} className="flex items-center pl-[10vw]">
-                     <div className="flex items-center">
+        // 🟢 FIX FOR PRODUCTION SCROLL: Ensure container is relative and has explicit height to force scroll
+        <div ref={targetRef} className="relative w-full h-[400vh]"> 
+             {/* Sticky container must be relative to this wrapper, and Top-0 */}
+             <div className="sticky top-0 h-[100vh] w-full flex items-center overflow-hidden bg-black/95">
+                 {/* 🟢 INCREASED GAP FOR TEXT SPACING + LEFT PADDING */}
+                 <motion.div style={{ x }} className="flex items-center pl-[25vw] gap-48">
+                     <div className="flex items-center shrink-0">
                         <div className="mr-12 flex flex-col justify-center min-w-[300px]">
                             <h2 className="text-6xl font-albert-black text-white mb-4">VIDEO<br/>GALLERY</h2>
                             <p className="text-white/50 text-sm w-48">Scroll down to explore the collection. Click cards to view videos.</p>
                             <div className="w-12 h-1 mt-6" style={{ backgroundColor: color }} />
                         </div>
-                        
-                        {items.map((item, index) => (
-                             <FlipVideoCard key={item.id} item={item} index={index} color={color} />
-                        ))}
-                        
-                        {/* End Spacer */}
-                        <div className="w-[50vw]" />
                      </div>
+                     
+                     {items.map((item, index) => (
+                          <FlipVideoCard key={item.id} item={item} index={index} color={color} />
+                     ))}
+                     
+                     {/* End Spacer */}
+                     <div className="w-[50vw] shrink-0" />
                  </motion.div>
              </div>
         </div>
@@ -658,10 +672,11 @@ const GalleryModalView: React.FC<{ images: string[], projectId?: number, project
     // 🟢 Special Render for Horizontal Scroll Project (Project 6)
     if (project?.layout === 'horizontal-scroll' && project.horizontalData) {
         return (
+            // 🟢 FIX FOR VERCEL: Ensure this container has explicit full height and relative positioning
             <div
                 ref={scrollContainerRef}
                 onScroll={handleScroll}
-                className="w-full h-full overflow-y-auto overflow-x-hidden floating-scrollbar relative z-10 p-0 bg-black"
+                className="w-full h-full overflow-y-auto overflow-x-hidden floating-scrollbar relative z-10 p-0 bg-black block"
             >
                 {/* 🟢 PASS THE PROJECT COLOR DOWN */}
                 <HorizontalScrollGallery items={project.horizontalData} parentScrollRef={scrollContainerRef} color={project.color} />
@@ -904,6 +919,18 @@ const VinylProjects: React.FC = () => {
     const containerRef = useRef<HTMLDivElement>(null);
     const [hoveredProject, setHoveredProject] = useState<any>(null);
     const leaveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+    // 🟢 NEW: Global Music Control Logic based on Modal State
+    useEffect(() => {
+        // Project ID 6 is the video project
+        if (selectedProject?.id === 6) {
+            // Pause background music when entering Project 6 modal
+            window.dispatchEvent(new Event('pause-background-music'));
+        } else {
+            // Resume background music when closing modal (if it was playing before)
+            window.dispatchEvent(new Event('resume-background-music'));
+        }
+    }, [selectedProject]);
 
     const { scrollYProgress } = useScroll({
         target: containerRef,

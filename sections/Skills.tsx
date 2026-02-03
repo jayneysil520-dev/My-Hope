@@ -1,5 +1,3 @@
-
-
 import React, { useRef, useState, useMemo } from 'react';
 import { motion, useTransform, useMotionValue, useSpring, useScroll, useMotionTemplate, AnimatePresence } from 'framer-motion';
 import Magnetic from '../components/Magnetic';
@@ -33,7 +31,7 @@ const skills = [
         percentText: "92%", 
         color: "#F59E0B", 
         tags: "运营设计, 平面设计, 品牌设计",
-        previewImg: "https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20260108181225_278_2.jpg",
+        previewImg: "https://cdn.jsdelivr.net/gh/jayneysil520-dev/jayneysil@main/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20260108181225_278_2.jpg",
         previewRotate: -6,
         previewText: "HELLO?"
     },
@@ -44,7 +42,7 @@ const skills = [
         percentText: "87%", 
         color: "#3B82F6", 
         tags: "LIBLIB, Comfy UI, Web UI",
-        previewImg: "https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/capa-grass.png",
+        previewImg: "https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/capa-grass.png",
         previewRotate: 8,
         previewText: "GRASS"
     },
@@ -55,7 +53,7 @@ const skills = [
         percentText: "82%", 
         color: "#EA580C", 
         tags: "C4D, Blender, Rendering",
-        previewImg: "https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/capa-%E7%99%BD%E7%BE%8A.png",
+        previewImg: "https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/capa-%E7%99%BD%E7%BE%8A.png",
         previewRotate: -12,
         previewText: "Myself"
     },
@@ -66,19 +64,19 @@ const skills = [
         percentText: "80%", 
         color: "#8B5CF6", 
         tags: "After Effects, Premiere Pro",
-        videoUrl: "https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/1%E6%9C%889%E6%97%A5.mp4",
+        videoUrl: "https://cdn.jsdelivr.net/gh/jayneysil520-dev/jayneysil@main/1%E6%9C%889%E6%97%A5.mp4",
         previewRotate: 5,
         previewText: "Tokyo Run"
     },
 ];
 
 const softwares = [
-    { name: 'Fig', iconUrl: 'https://jsd.cdn.zzko.cn/gh/devicons/devicon/icons/figma/figma-original.svg', color: '#F24E1E', previewRotate: 15 }, 
-    { name: 'Ps', iconUrl: 'https://jsd.cdn.zzko.cn/gh/devicons/devicon/icons/photoshop/photoshop-plain.svg', color: '#31A8FF', previewRotate: -10 }, 
-    { name: 'Ai', iconUrl: 'https://jsd.cdn.zzko.cn/gh/devicons/devicon/icons/illustrator/illustrator-plain.svg', color: '#FF9A00', previewRotate: 8 }, 
-    { name: 'Ae', iconUrl: 'https://jsd.cdn.zzko.cn/gh/devicons/devicon/icons/aftereffects/aftereffects-original.svg', color: '#9999FF', previewRotate: -15 }, 
-    { name: 'Bl', iconUrl: 'https://jsd.cdn.zzko.cn/gh/devicons/devicon/icons/blender/blender-original.svg', color: '#F5792A', previewRotate: 12 }, 
-    { name: 'C4D', iconUrl: 'https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/1197px-C4D_Logo.png', color: '#2A55F5', previewRotate: -8 }, 
+    { name: 'Fig', iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg', color: '#F24E1E', previewRotate: 15 }, 
+    { name: 'Ps', iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/photoshop/photoshop-plain.svg', color: '#31A8FF', previewRotate: -10 }, 
+    { name: 'Ai', iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/illustrator/illustrator-plain.svg', color: '#FF9A00', previewRotate: 8 }, 
+    { name: 'Ae', iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/aftereffects/aftereffects-original.svg', color: '#9999FF', previewRotate: -15 }, 
+    { name: 'Bl', iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/blender/blender-original.svg', color: '#F5792A', previewRotate: 12 }, 
+    { name: 'C4D', iconUrl: 'https://cdn.jsdelivr.net/gh/jayneysil520-dev/jayneysil@main/1197px-C4D_Logo.png', color: '#2A55F5', previewRotate: -8 }, 
 ];
 
 // --- DEPTH CONFIG ---
@@ -390,7 +388,7 @@ const Skills: React.FC = () => {
                     transition={{ delay: 1, type: "spring" }}
                 >
                      <img 
-                        src="https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/mouse-render.png" 
+                        src="https://cdn.jsdelivr.net/gh/jayneysil520-dev/jayneysil@main/mouse-render.png" 
                         onError={(e) => { e.currentTarget.src = "https://cdn-icons-png.flaticon.com/512/9684/9684876.png" }}
                         alt="Mouse" 
                         className="w-full drop-shadow-xl"

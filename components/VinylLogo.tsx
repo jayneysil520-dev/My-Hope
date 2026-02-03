@@ -1,40 +1,74 @@
 
-
 import React, { useRef, useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 // --- 音乐播放列表配置 ---
-// FIX: Using jsd.cdn.zzko.cn for China accessibility
+// FIX: Using jsDelivr for China accessibility
 const PLAYLIST = [
     {
         title: "Head in the clouds",
-        url: "https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/1.mp3" 
+        url: "https://cdn.jsdelivr.net/gh/jayneysil520-dev/jayneysil@main/1.mp3" 
     },
     {
         title: "Un Amico", 
-        url: "https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/2.mp3" 
+        url: "https://cdn.jsdelivr.net/gh/jayneysil520-dev/jayneysil@main/2.mp3" 
     },
     {
         title: "Death bed",
-        url: "https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/3.mp3"
+        url: "https://cdn.jsdelivr.net/gh/jayneysil520-dev/jayneysil@main/3.mp3"
     },
     {
         title: "Luv(sic.)pt3", 
-        url: "https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/4.mp3" 
+        url: "https://cdn.jsdelivr.net/gh/jayneysil520-dev/jayneysil@main/4.mp3" 
     },
     {
         title: "Repeat until death", 
-        url: "https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/5.mp3" 
+        url: "https://cdn.jsdelivr.net/gh/jayneysil520-dev/jayneysil@main/5.mp3" 
     },
 ];
 
 const VinylLogo: React.FC = () => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  // 新增：记录被外部事件打断前的播放状态
+  const wasPlayingRef = useRef<boolean>(false);
 
   const [isMuted, setIsMuted] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false); // 新增：用于检测是否悬停
+
+  // 🟢 NEW: 监听外部暂停/恢复事件
+  useEffect(() => {
+    // 暂停事件处理
+    const handleExternalPause = () => {
+      if (audioRef.current && !audioRef.current.paused) {
+        // 记录当前正在播放，是被强制打断的
+        wasPlayingRef.current = true;
+        audioRef.current.pause();
+        setIsPlaying(false);
+      } else {
+        // 如果本来就是暂停的，记录下来，恢复时不要自动播放
+        wasPlayingRef.current = false;
+      }
+    };
+
+    // 恢复事件处理
+    const handleExternalResume = () => {
+        // 只有当被打断前是播放状态时，才恢复播放
+        if (wasPlayingRef.current && audioRef.current) {
+            audioRef.current.play().catch(e => console.log("Resume failed", e));
+            setIsPlaying(true);
+        }
+    };
+
+    window.addEventListener('pause-background-music', handleExternalPause);
+    window.addEventListener('resume-background-music', handleExternalResume);
+    
+    return () => {
+      window.removeEventListener('pause-background-music', handleExternalPause);
+      window.removeEventListener('resume-background-music', handleExternalResume);
+    };
+  }, []);
 
   // 监听当前歌曲索引变化，实现切歌播放
   useEffect(() => {
@@ -140,10 +174,12 @@ const VinylLogo: React.FC = () => {
             audioRef.current.play().then(() => {
                 setIsPlaying(true);
                 setIsMuted(false);
+                wasPlayingRef.current = true; // 手动播放，更新状态
             });
         } else {
             audioRef.current.pause();
             setIsPlaying(false);
+            wasPlayingRef.current = false; // 手动暂停，更新状态
         }
     }
   };
