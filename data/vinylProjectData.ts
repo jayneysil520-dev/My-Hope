@@ -167,7 +167,7 @@ export const PROJECTS_DATA = [
         // 🟢 NEW: Video Interaction Configuration
         videoInteraction: {
             y: 400, // Position Y from top
-            videoUrl:'https://7picw4yc54rlegc8.public.blob.vercel-storage.com/%E8%9B%8B%E4%BB%94%E6%B4%BE%E5%AF%B9.mp4'
+            videoUrl: 'https://7picw4yc54rlegc8.public.blob.vercel-storage.com/%E8%9B%8B%E4%BB%94%E6%B4%BE%E5%AF%B9.mp4'
         }
       },
       detailImages: [], // Fallback/Empty as we use project2Config
@@ -192,6 +192,7 @@ export const PROJECTS_DATA = [
       desc: 'Rhythm of city life captured in a rhythmic event discovery application.',
       tools: ['Figma', 'LibLib', 'PS', 'AI'],
       layout: 'gallery',
+      // 🟢 REMOVED: topSequenceConfig deleted as requested
       detailImages: [
           'https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/%E5%8D%AB%E5%B2%97/%E5%8D%AB%E5%B2%97%E9%95%BF%E5%9B%BE1.png',
           'https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/%E5%8D%AB%E5%B2%97/%E5%8D%AB%E5%B2%97%E9%95%BF%E5%9B%BE2.png'
@@ -331,7 +332,7 @@ export const PROJECTS_DATA = [
       id: 8, title: '设计能力沉淀', label: 'Personal Growth', year: '2021-2026', color: '#FF0055', 
       img: 'https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/animation/Group%20951.png', 
       desc: 'Visualizing sound waves in real-time using WebAudio API and Canvas.',
-      tools: ['Figma', 'PS']
+      tools: ['Figma', 'PS'], // 🟢 Added missing comma
       layout: 'gallery',
       detailImages: [
           'https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/animation/%E7%BD%91%E9%A1%B5%E9%95%BF%E5%9B%BE.png',

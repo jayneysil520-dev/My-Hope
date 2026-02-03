@@ -969,25 +969,6 @@ const GalleryModalView: React.FC<{ images: string[], projectId?: number, project
                                 })}
                             </div>
                         </div>
-                    ) : project?.topSequenceConfig ? (
-                        // 🟢 PROJECT 4 (or generic): Sequence at Top Logic
-                        <>
-                            {/* 1. SCROLL SEQUENCE AT TOP */}
-                            <ScrollImageSequence config={project.topSequenceConfig} scrollContainerRef={scrollContainerRef} />
-                            
-                            {/* 2. Standard Images following the sequence */}
-                            {images.map((imgUrl, index) => (
-                                <div key={index} className="w-full bg-black">
-                                    <img 
-                                        src={imgUrl} 
-                                        className="w-full h-auto block" 
-                                        loading="lazy" 
-                                        decoding="async" 
-                                        alt={`Project Detail ${index + 1}`} 
-                                    />
-                                </div>
-                            ))}
-                        </>
                     ) : (
                         // Default rendering for other projects
                         images.map((imgUrl, index) => (
