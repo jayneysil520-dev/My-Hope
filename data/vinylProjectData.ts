@@ -7,7 +7,7 @@ export const MY_CUSTOM_LONG_IMAGE = 'https://raw.githubusercontent.com/jayneysil
 
 // 资源链接
 export const ASSETS = {
-    P1_IMG_1: 'https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/%E9%95%BF%E5%9B%BE/%E5%86%92%E9%99%A9%E5%B0%8F%E9%98%9F%E9%95%BF%E5%9B%BE1.png',
+    P1_IMG_1: 'https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/%E5%86%92%E9%99%A9%E5%B0%8F%E9%98%9F/%E5%86%92%E9%99%A9%E5%B0%8F%E9%98%9F%E9%95%BF%E5%9B%BE1%E2%80%94%E2%80%94%E8%B0%83%E6%95%B4%E5%AD%97%E4%BD%93%E7%89%88%E6%9C%AC.png',
     P1_IMG_2: 'https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%8D%A1%E7%89%87%E7%AC%AC%E4%BA%8C%E9%95%BF%E5%9B%BE%E6%9C%80%E5%90%8E%E4%B8%80%E7%89%88.png',
     P1_IMG_3: 'https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%8D%A1%E7%89%87%E7%AC%AC%E5%9B%9B%E9%95%BF%E5%9B%BE.png',
     P1_VID_1: "https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/%E9%93%85%E7%AC%94%E7%9A%84%E8%A7%86%E9%A2%91.mp4",
@@ -32,7 +32,7 @@ export const CUSTOM_FOX_RABBIT_CONFIG: WaveItemConfig[] = [
     {
         url: MY_CUSTOM_LONG_IMAGE,
         x: 375,
-        y: 8980,
+        y: 8740,
         width: 750,
         rotate: 0,
         zIndex: 30
@@ -42,17 +42,17 @@ export const CUSTOM_FOX_RABBIT_CONFIG: WaveItemConfig[] = [
 // 自由布局配置 (Wave Images)
 // 🔒 DATA LOCKED: User specified values
 export const WAVE_IMAGES_CONFIG: WaveItemConfig[] = [
-    { url: 'https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/%E9%95%BF%E5%9B%BE/down.png', x: -400, y: 9270, width: 770, rotate: 0, zIndex: 3, delay: 0.1 },
-    { url: 'https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/%E9%95%BF%E5%9B%BE/midle.png', x: -400, y: 9110, width: 770, rotate: 0, zIndex: 2, delay: 0.2 },
-    { url: 'https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/%E9%95%BF%E5%9B%BE/up.png', x: -400, y: 9000, width: 770, rotate: 0, zIndex: 1, delay: 0.3 }
+    { url: 'https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/%E9%95%BF%E5%9B%BE/down.png', x: -390, y: 9040, width: 755, rotate: 0, zIndex: 3, delay: 0.1 },
+    { url: 'https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/%E9%95%BF%E5%9B%BE/midle.png', x: -390, y: 8870, width: 755, rotate: 0, zIndex: 2, delay: 0.2 },
+    { url: 'https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/%E9%95%BF%E5%9B%BE/up.png', x: -390, y: 8760, width: 755, rotate: 0, zIndex: 1, delay: 0.3 }
 ];
 
 // Group 1 Cards Data
 export const GROUP_1_CARDS_DATA = [
-    { id: 1, xOffset: -400, yOffset: 8560, width: 188.52, height: 109.18, rotate: 0, borderRadius: '32px', img: 'https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/%E9%95%BF%E5%9B%BE/1.png' },
-    { id: 2, xOffset: -201.5, yOffset: 8560, width: 188.52, height: 68.61, rotate: 0, borderRadius: '32px', img: 'https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/%E9%95%BF%E5%9B%BE/2.png' },
-    { id: 3, xOffset: -3, yOffset: 8560, width: 188.52, height: 90.28, rotate: 0, borderRadius: '32px', img: 'https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/%E9%95%BF%E5%9B%BE/3.png' },
-    { id: 4, xOffset: 195.52, yOffset: 8560, width: 188.52, height: 109.18, rotate: 0, borderRadius: '32px', img: 'https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/%E9%95%BF%E5%9B%BE/4.png' }
+    { id: 1, xOffset: -400, yOffset: 8360, width: 188.52, height: 109.18, rotate: 0, borderRadius: '32px', img: 'https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/%E9%95%BF%E5%9B%BE/1.png' },
+    { id: 2, xOffset: -201.5, yOffset: 8360, width: 188.52, height: 68.61, rotate: 0, borderRadius: '32px', img: 'https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/%E9%95%BF%E5%9B%BE/2.png' },
+    { id: 3, xOffset: -3, yOffset: 8360, width: 188.52, height: 90.28, rotate: 0, borderRadius: '32px', img: 'https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/%E9%95%BF%E5%9B%BE/3.png' },
+    { id: 4, xOffset: 195.52, yOffset: 8360, width: 188.52, height: 109.18, rotate: 0, borderRadius: '32px', img: 'https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/%E9%95%BF%E5%9B%BE/4.png' }
 ];
 
 // New Scattered Images
@@ -61,7 +61,7 @@ export const CUSTOM_NEW_IMAGES = [
         id: 'd1', 
         img: 'https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/%E9%95%BF%E5%9B%BE/d1.png', 
         x: 350,      
-        y: 10200,    
+        y: 9940,    
         w: 220.8,      
         h: 307.2,      
         r: -7.76      
@@ -70,7 +70,7 @@ export const CUSTOM_NEW_IMAGES = [
         id: 'd2', 
         img: 'https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/%E9%95%BF%E5%9B%BE/d2.png', 
         x: 515, 
-        y: 10420, 
+        y: 10160, 
         w: 220.8, 
         h: 307.2, 
         r: 10.12 
@@ -79,7 +79,7 @@ export const CUSTOM_NEW_IMAGES = [
         id: 'd3', 
         img: 'https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/%E9%95%BF%E5%9B%BE/d3.png', 
         x: 635, 
-        y:10050, 
+        y:9790, 
         w: 220.8, 
         h: 307.2,  
         r: 2.15 
@@ -88,7 +88,7 @@ export const CUSTOM_NEW_IMAGES = [
         id: 'd4', 
         img: 'https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/%E9%95%BF%E5%9B%BE/d4.png', 
         x: 920, 
-        y: 10280, 
+        y: 10020, 
         w: 220.8, 
         h: 307.2,  
         r: -5.54 
