@@ -16,7 +16,6 @@ const HERO_SCALE = 0.7;
 const CARD_SIZE_CLASSES = "w-[240px] md:w-[300px]"; 
 
 // 🟢 3. CARD POSITIONS: Randomized "Messy Floor" Layout
-// Designed to look like cards thrown on a surface
 const CARD_LAYOUT_CONFIG = [
     { left: '-12%',  top: '-8%', zIndex: 10 }, // Top Left (High)
     { left: '77%', top: '58%', zIndex: 12 }, // Bottom Right (Cluster)
@@ -30,7 +29,6 @@ const CARD_LAYOUT_CONFIG = [
 ];
 
 // --- DATA ---
-// Updated to use jsd.cdn.zzko.cn
 const heroCards = [
   { 
       id: 1, 
@@ -96,6 +94,78 @@ const DEPTHS = {
     PROPS: -290,
     CARDS: -50,
     TEXT: 10, 
+};
+
+// 🟢 NEW COMPONENT: Split Text & Reveal (Real Magic Style)
+const ImageRevealHeroTitle: React.FC = () => {
+    const [isHovered, setIsHovered] = useState(false);
+
+    // Image to reveal (Pill shape reveal)
+    const REVEAL_IMAGE = "https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/animation/2%20(3).png";
+
+    return (
+        <div 
+            className="relative flex items-center justify-center cursor-pointer select-none group h-[1.2em] w-full"
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+        >
+            {/* 1. Left Text Part: 'zhanG' */}
+            <motion.h1 
+                className="font-albert-black text-[6vw] md:text-[8vw] leading-none tracking-tighter whitespace-nowrap transform -skew-x-6 origin-right z-20 relative"
+                animate={{ 
+                    x: isHovered ? '-22%' : '0%', // Slide Left
+                    color: isHovered ? '#D40411' : '#000000', // Change to Brand Red
+                }}
+                transition={{ type: "spring", stiffness: 150, damping: 16 }}
+            >
+                zhanG
+            </motion.h1>
+
+            {/* 2. Hidden Image Reveal (Pops up in the middle) */}
+            <motion.div
+                className="absolute z-10 pointer-events-none rounded-[2rem] overflow-hidden border-4 border-white shadow-2xl"
+                style={{
+                    width: '12vw',
+                    height: '16vw', // Portrait / Pill shape
+                    top: '50%',
+                    left: '50%',
+                    // Center the absolute element
+                    marginTop: '-8vw',
+                    marginLeft: '-6vw' 
+                }}
+                initial={{ scale: 0, rotate: -15, opacity: 0 }}
+                animate={{
+                    scale: isHovered ? 1 : 0,
+                    rotate: isHovered ? 6 : -15,
+                    opacity: isHovered ? 1 : 0
+                }}
+                transition={{ 
+                    type: "spring", 
+                    stiffness: 180, 
+                    damping: 14,
+                    delay: isHovered ? 0.05 : 0 // Slight delay on enter for pop effect
+                }}
+            >
+                <img 
+                    src={REVEAL_IMAGE} 
+                    alt="Magic Reveal" 
+                    className="w-full h-full object-cover"
+                />
+            </motion.div>
+
+            {/* 3. Right Text Part: 'minGlei' */}
+            <motion.h1 
+                className="font-albert-black text-[6vw] md:text-[8vw] leading-none tracking-tighter whitespace-nowrap transform -skew-x-6 origin-left z-20 relative ml-[2vw]"
+                animate={{ 
+                    x: isHovered ? '22%' : '0%', // Slide Right
+                    color: isHovered ? '#D40411' : '#000000', // Change to Brand Red
+                }}
+                transition={{ type: "spring", stiffness: 150, damping: 16 }}
+            >
+                minGlei
+            </motion.h1>
+        </div>
+    );
 };
 
 // Wrapper component to handle individual hover state and random floating
@@ -230,20 +300,22 @@ const Hero: React.FC = () => {
                         {/* Floor */}
                         <div className="absolute inset-[-50%] bg-white transform-preserve-3d" style={{ transform: `translateZ(${DEPTHS.FLOOR}px)` }} />
                         
-                        {/* 1. Main Title - Reverted Sizes */}
+                        {/* 1. Main Title - Updated with Split Text & Reveal Effect */}
+                        {/* 🟢 ADJUST VERTICAL POSITION HERE: 'top-[15%]' controls the whole text block */}
                         <div className="absolute top-[15%] left-0 w-full text-center pointer-events-none" style={{ transform: `translateZ(${DEPTHS.TEXT}px) rotateX(-10deg)` }}>
                              <motion.div 
-                                className="font-albert-black text-[6vw] md:text-[8vw] leading-none tracking-tighter mix-blend-multiply opacity-90 whitespace-nowrap flex flex-col justify-center items-center"
+                                className="pointer-events-auto inline-block" // Ensure pointer events work for hover
                                 initial={{ opacity: 0, y: 150 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
                                 viewport={{ once: true }}
                              >
-                                <span className="text-black transform -skew-x-6">zhanG minGlei</span>
+                                <ImageRevealHeroTitle />
                             </motion.div>
 
+                            {/* 🟢 ADJUST SUBTITLE SPACING HERE: 'mt-8' controls distance from main title */}
                             <motion.div 
-                                className="mt-4 flex flex-col items-center gap-2"
+                                className="mt-16 flex flex-col items-center gap-3"
                                 initial={{ opacity: 0, y: 80 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 1.2, ease: "easeOut", delay: 0.4 }}
