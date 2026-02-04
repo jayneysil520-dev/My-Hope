@@ -208,25 +208,37 @@ const Project2FlipVideo: React.FC<{ config: any }> = ({ config }) => {
     );
 };
 
-// 🟢 NEW: Flip Card Component for Project 6 (Updated with Dynamic Size)
+// 🟢 NEW: Flip Card Component for Project 6 (Updated with Dynamic Size & Spotlight Border)
 const FlipVideoCard: React.FC<{ 
     item: any; 
     index: number; 
     color: string;
-    activeVideoIndex: number | null; // 🟢 NEW: To track which video has sound
-    setActiveVideoIndex: (idx: number) => void; // 🟢 NEW: To set active video
+    activeVideoIndex: number | null; 
+    setActiveVideoIndex: (idx: number) => void; 
 }> = ({ item, index, color, activeVideoIndex, setActiveVideoIndex }) => {
     const [isFlipped, setIsFlipped] = useState(false);
     const videoRef = useRef<HTMLVideoElement>(null);
     const cardRef = useRef<HTMLDivElement>(null);
+    
+    // Mouse tracking for spotlight border
     const mouseX = useMotionValue(0);
     const mouseY = useMotionValue(0);
 
-    const handleMouseMove = ({ clientX, clientY }: React.MouseEvent) => {
+    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
         if (!cardRef.current) return;
-        const { left, top } = cardRef.current.getBoundingClientRect();
-        mouseX.set(clientX - left);
-        mouseY.set(clientY - top);
+        const rect = cardRef.current.getBoundingClientRect();
+        mouseX.set(e.clientX - rect.left);
+        mouseY.set(e.clientY - rect.top);
+    };
+
+    const handleFlip = () => {
+        const nextState = !isFlipped;
+        setIsFlipped(nextState);
+        
+        // 🟢 Resume music explicitly when closing
+        if (nextState === false) {
+            window.dispatchEvent(new Event('resume-background-music'));
+        }
     };
 
     // Auto-play video when flipped
@@ -242,8 +254,6 @@ const FlipVideoCard: React.FC<{
             videoRef.current.play().catch(e => console.log("Video play failed", e));
         } else if (!isFlipped && videoRef.current) {
             videoRef.current.pause();
-            // 🟢 3. Resume Music when video is closed (unflipped) manually
-            window.dispatchEvent(new Event('resume-background-music'));
         }
     }, [isFlipped]);
 
@@ -272,7 +282,7 @@ const FlipVideoCard: React.FC<{
             animate={{ width: currentWidth, height: currentHeight }}
             transition={{ type: "spring", stiffness: 60, damping: 12 }}
             onMouseMove={handleMouseMove}
-            onClick={() => setIsFlipped(!isFlipped)}
+            onClick={handleFlip}
         >
              {/* 🟢 NEW: INTRO TEXT (Rendered outside the flipping container but inside the relative wrapper) */}
              {item.introConfig && (
@@ -304,40 +314,49 @@ const FlipVideoCard: React.FC<{
             >
                 {/* --- FRONT: IMAGE --- */}
                 <div 
-                    className="absolute inset-0 backface-hidden rounded-3xl overflow-hidden bg-white shadow-xl border border-white/20"
-                    style={{ backfaceVisibility: 'hidden' }}
+                    className="absolute inset-0 backface-hidden rounded-3xl overflow-hidden bg-white transition-shadow duration-300"
+                    style={{ 
+                        backfaceVisibility: 'hidden',
+                    }}
                 >
-                    {/* 🟢 HOVER EFFECT: Spotlight Gradient Layer */}
+                    {/* 🟢 SPOTLIGHT BORDER EFFECT */}
+                    {/* This layer creates the glowing border mask */}
                     <motion.div
-                        className="absolute -inset-[1px] rounded-[2rem] z-10 opacity-0 group-hover:opacity-50 transition-opacity duration-300 pointer-events-none"
+                        className="absolute inset-0 z-20 pointer-events-none rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                         style={{
-                            background: color,
+                            padding: '3px', // Border width
+                            background: color, // The dynamic brand color
                             maskImage: useMotionTemplate`radial-gradient(300px circle at ${mouseX}px ${mouseY}px, black, transparent)`,
                             WebkitMaskImage: useMotionTemplate`radial-gradient(300px circle at ${mouseX}px ${mouseY}px, black, transparent)`,
                         }}
-                    />
-                    
-                    {/* 🟢 HOVER EFFECT: Glow Background */}
-                    <div 
-                        className="absolute inset-0 rounded-3xl blur-md opacity-0 group-hover:opacity-30 transition-all duration-500 z-0"
+                    >
+                        {/* Mask inner content to create border shape */}
+                        <div className="w-full h-full bg-black rounded-[calc(1.5rem-2px)]" />
+                    </motion.div>
+
+                    {/* 🟢 DYNAMIC COLORED SHADOW (ON HOVER) */}
+                    <motion.div 
+                        className="absolute inset-4 rounded-3xl blur-2xl opacity-0 group-hover:opacity-60 transition-opacity duration-500 z-0"
                         style={{ backgroundColor: color }}
                     />
 
-                    {/* Image */}
-                    <img src={item.img} alt={item.title} className="w-full h-full object-cover relative z-0" />
-                    
-                    {/* Overlay Hint */}
-                    <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-[2px] z-20">
-                         <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-md border border-white/50 flex items-center justify-center">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
-                                <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" />
-                                <polyline points="16 6 12 2 8 6" />
-                                <line x1="12" y1="2" x2="12" y2="15" />
-                            </svg>
-                         </div>
+                    {/* Image Container */}
+                    <div className="absolute inset-[2px] rounded-[calc(1.5rem-2px)] overflow-hidden z-10 bg-white">
+                        <img src={item.img} alt={item.title} className="w-full h-full object-cover relative" />
+                        
+                        {/* Overlay Hint */}
+                        <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-[2px]">
+                             <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-md border border-white/50 flex items-center justify-center">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
+                                    <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" />
+                                    <polyline points="16 6 12 2 8 6" />
+                                    <line x1="12" y1="2" x2="12" y2="15" />
+                                </svg>
+                             </div>
+                        </div>
                     </div>
                     
-                    <div className="absolute bottom-6 left-6 right-6 z-20">
+                    <div className="absolute bottom-6 left-6 right-6 z-20 pointer-events-none">
                         <span className="px-3 py-1 bg-black/50 backdrop-blur-md rounded-full text-xs font-bold text-white border border-white/20">
                             CLICK TO FLIP
                         </span>
@@ -365,7 +384,6 @@ const FlipVideoCard: React.FC<{
                         }}
                         onError={(e) => console.error("Video Error:", e)}
                     />
-                    {/* 🟢 REMOVED TITLE DIV AS REQUESTED */}
                 </div>
             </motion.div>
         </motion.div>
@@ -663,10 +681,9 @@ const ProjectImageSquare: React.FC<{
                 }}
                 className="w-full h-full relative transform-style-3d"
              >
-                 {/* WHITE BORDER LAYER - Enhanced for visibility at smaller scale */}
-                 {/* Used border-4 to ensure it remains distinct when scaled down */}
+                 {/* 🟢 MODIFIED: WHITE BORDER LAYER IS NOW TRANSPARENT */}
                  <div 
-                    className="absolute inset-0 rounded-[2.5rem] bg-white border-4 border-white/40 pointer-events-none"
+                    className="absolute inset-0 rounded-[2.5rem] bg-transparent border-4 border-white/10 pointer-events-none"
                     style={{ 
                         transform: 'translateZ(-10px)',
                         boxShadow: '30px 30px 60px rgba(0,0,0,0.15)' 
@@ -674,7 +691,8 @@ const ProjectImageSquare: React.FC<{
                 />
 
                 <Spotlight3D 
-                    className="w-full h-full rounded-[2.5rem] bg-white/20 backdrop-blur-md border-[3px] border-white/60 shadow-sm" 
+                    // 🟢 MODIFIED: Subtler border for transparent effect
+                    className="w-full h-full rounded-[2.5rem] bg-white/20 backdrop-blur-md border-[3px] border-white/20 shadow-sm" 
                     color={project.shadowColor || project.color}
                     disableTilt={false}
                     spotlightColor="transparent" 

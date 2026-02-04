@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 // --- 音乐播放列表配置 ---
 // FIX: Using jsd.cdn.zzko.cn for China accessibility and speed
-const PLAYLIST = [
+const ORIGINAL_PLAYLIST = [
     {
         title: "Head in the clouds",
         url: "https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/1.mp3" 
@@ -29,56 +29,80 @@ const PLAYLIST = [
 
 const VinylLogo: React.FC = () => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  // 新增：记录被外部事件打断前的播放状态
   const wasPlayingRef = useRef<boolean>(false);
 
+  // 🟢 NEW: State to hold the shuffled playlist
+  const [playlist, setPlaylist] = useState(ORIGINAL_PLAYLIST);
+  
   const [isMuted, setIsMuted] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isHovered, setIsHovered] = useState(false); // 新增：用于检测是否悬停
+  const [isHovered, setIsHovered] = useState(false);
 
-  // 🟢 NEW: 监听外部暂停/恢复事件
+  // 🟢 1. RANDOM SHUFFLE ON MOUNT
+  useEffect(() => {
+      const shuffled = [...ORIGINAL_PLAYLIST];
+      // Fisher-Yates Shuffle Algorithm
+      for (let i = shuffled.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      setPlaylist(shuffled);
+  }, []);
+
+  // 🟢 NEW: 监听外部暂停/恢复事件 & 全局点击恢复
   useEffect(() => {
     // 暂停事件处理
     const handleExternalPause = () => {
       if (audioRef.current && !audioRef.current.paused) {
-        // 记录当前正在播放，是被强制打断的
         wasPlayingRef.current = true;
         audioRef.current.pause();
         setIsPlaying(false);
       } else {
-        // 如果本来就是暂停的，记录下来，恢复时不要自动播放
-        wasPlayingRef.current = false;
+        // Don't reset wasPlayingRef if already paused, to avoid losing state
+        // wasPlayingRef.current = false; 
       }
     };
 
     // 恢复事件处理
     const handleExternalResume = () => {
-        // 只有当被打断前是播放状态时，才恢复播放
         if (wasPlayingRef.current && audioRef.current) {
             audioRef.current.play().catch(e => console.log("Resume failed", e));
             setIsPlaying(true);
         }
     };
 
+    // 🟢 全局点击恢复逻辑：如果音乐是被暂时打断的，用户的下一个点击动作会尝试恢复播放
+    const handleGlobalClickToResume = () => {
+        if (wasPlayingRef.current && audioRef.current && audioRef.current.paused) {
+            // 只有当不是静音且之前在播放时才恢复
+            if (!isMuted) {
+                audioRef.current.play().catch(e => console.log("Click resume failed", e));
+                setIsPlaying(true);
+                // Reset flag so we don't keep trying
+                // wasPlayingRef.current = false; // Optional: keep true if we want consistent resume behavior
+            }
+        }
+    };
+
     window.addEventListener('pause-background-music', handleExternalPause);
     window.addEventListener('resume-background-music', handleExternalResume);
+    window.addEventListener('click', handleGlobalClickToResume); // Listen for any click
     
     return () => {
       window.removeEventListener('pause-background-music', handleExternalPause);
       window.removeEventListener('resume-background-music', handleExternalResume);
+      window.removeEventListener('click', handleGlobalClickToResume);
     };
-  }, []);
+  }, [isMuted]); // Dependency on isMuted to prevent unmuting if user explicitly muted
 
   // 监听当前歌曲索引变化，实现切歌播放
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
 
-    // 重新加载音频资源
     audio.load();
 
-    // 如果当前状态是“播放中”，则切歌后立即播放
     if (isPlaying) {
         const playPromise = audio.play();
         if (playPromise !== undefined) {
@@ -87,7 +111,7 @@ const VinylLogo: React.FC = () => {
             });
         }
     }
-  }, [currentIndex]); // 依赖 currentIndex
+  }, [currentIndex, playlist]); // Added playlist dependency
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -95,7 +119,6 @@ const VinylLogo: React.FC = () => {
 
     audio.volume = 0.4;
 
-    // 初始尝试自动播放（针对第一首歌）
     const attemptPlay = async () => {
         try {
             await audio.play();
@@ -104,52 +127,22 @@ const VinylLogo: React.FC = () => {
         } catch (err: any) {
             if (err.name === 'NotAllowedError') {
                  console.log("Autoplay blocked. Waiting for interaction.");
-                 addInteractionListeners();
+                 // Interaction listener logic handled by global click above mostly, 
+                 // but kept specific initial trigger just in case
             }
         }
     };
-
-    const addInteractionListeners = () => {
-        const enableAudio = async () => {
-            try {
-                if (audioRef.current) {
-                    await audioRef.current.play();
-                    setIsPlaying(true);
-                    setIsMuted(false);
-                }
-                cleanupListeners();
-            } catch (e) {
-                console.warn("Interaction play failed", e);
-            }
-        };
-
-        const cleanupListeners = () => {
-            window.removeEventListener('click', enableAudio);
-            window.removeEventListener('keydown', enableAudio);
-            window.removeEventListener('touchstart', enableAudio);
-            window.removeEventListener('scroll', enableAudio);
-        };
-
-        window.addEventListener('click', enableAudio);
-        window.addEventListener('keydown', enableAudio);
-        window.addEventListener('touchstart', enableAudio);
-        window.addEventListener('scroll', enableAudio);
-    };
-
     attemptPlay();
   }, []);
 
-  // --- 核心逻辑：当一首歌播放结束时 ---
   const handleSongEnd = () => {
-      console.log("Song ended, playing next...");
       handleNext();
   };
 
-  // 下一首逻辑
   const handleNext = () => {
-      // 索引 +1，如果到了最后一首，就回到 0 (取模运算)
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % PLAYLIST.length);
-      setIsPlaying(true); // 切歌总是暗示用户想听，所以设为播放状态
+      // Use the shuffled playlist length
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % playlist.length);
+      setIsPlaying(true);
   };
 
   const toggleMute = (e: React.MouseEvent) => {
@@ -165,7 +158,6 @@ const VinylLogo: React.FC = () => {
     }
   };
 
-  // 黑胶点击：现在只负责 播放/暂停
   const handleDiscClick = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
     
@@ -174,25 +166,25 @@ const VinylLogo: React.FC = () => {
             audioRef.current.play().then(() => {
                 setIsPlaying(true);
                 setIsMuted(false);
-                wasPlayingRef.current = true; // 手动播放，更新状态
+                wasPlayingRef.current = true;
             });
         } else {
             audioRef.current.pause();
             setIsPlaying(false);
-            wasPlayingRef.current = false; // 手动暂停，更新状态
+            wasPlayingRef.current = false;
         }
     }
   };
 
-  const currentSong = PLAYLIST[currentIndex];
+  // Safe access
+  const currentSong = playlist[currentIndex] || ORIGINAL_PLAYLIST[0];
 
   return (
     <div className="flex items-center gap-3">
-        {/* 1. 黑胶唱片 (悬停目标) */}
+        {/* 1. 黑胶唱片 */}
         <motion.div 
             className="relative flex flex-col items-center cursor-pointer group"
             onClick={handleDiscClick}
-            // 鼠标悬停事件
             onHoverStart={() => setIsHovered(true)}
             onHoverEnd={() => setIsHovered(false)}
             whileHover={{ scale: 1.1 }}
@@ -247,14 +239,14 @@ const VinylLogo: React.FC = () => {
             </svg>
         </button>
 
-        {/* 3. 歌名 (从下一首按钮右侧滑出) */}
+        {/* 3. 歌名 */}
         <AnimatePresence>
             {isHovered && (
                 <motion.div
                     initial={{ width: 0, opacity: 0, x: -10 }}
                     animate={{ width: "auto", opacity: 1, x: 0 }}
                     exit={{ width: 0, opacity: 0, x: -10 }}
-                    transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }} // Smooth cubic ease
+                    transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }} 
                     className="overflow-hidden flex items-center"
                 >
                     <div className="whitespace-nowrap text-[10px] font-albert-black tracking-widest text-black mr-3">
