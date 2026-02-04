@@ -1,3 +1,4 @@
+
 import React, { useRef, useState } from 'react';
 import { motion, useScroll, useMotionValueEvent, useMotionValue, useMotionTemplate } from 'framer-motion';
 import Magnetic from './Magnetic';
@@ -120,8 +121,8 @@ const Navbar: React.FC = () => {
 
             <Magnetic>
                 <motion.a
-                    href="#contact-footer"
-                    onClick={(e) => handleScroll(e, "#contact-footer")}
+                    href="#contact"
+                    onClick={(e) => handleScroll(e, "#contact")}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     className="ml-4 px-6 py-2 text-xs font-bold tracking-widest text-black border border-black/10 rounded-full backdrop-blur-md bg-white/30 shadow-sm hover:bg-white/50 transition-all block"
