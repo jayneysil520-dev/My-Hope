@@ -30,19 +30,20 @@ const CARD_LAYOUT_CONFIG = [
 ];
 
 // --- DATA ---
+// Updated to use jsd.cdn.zzko.cn
 const heroCards = [
   { 
       id: 1, 
       color: '#FF7F27', 
       rotate: 25, // More extreme rotation
-      img: 'https://cdn.jsdelivr.net/gh/jayneysil520-dev/jayneysil@main/1.png',
+      img: 'https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/1.png',
       scale: 1.32 // Larger feature card
   }, 
   { 
       id: 2, 
       color: '#00A2E8', 
       rotate: 15, 
-      img: 'https://cdn.jsdelivr.net/gh/jayneysil520-dev/jayneysil@main/2.png',
+      img: 'https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/2.png',
       scale: 1.14
   }, 
   { 
@@ -50,20 +51,20 @@ const heroCards = [
       color: '#55FFFF', 
       rotate: -35, // Sharp angle
       scale: 0.94,
-      img: 'https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/%E7%8C%BF%E8%BE%85%E5%AF%BC%E5%B0%81%E9%9D%A2.png'
+      img: 'https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/%E7%8C%BF%E8%BE%85%E5%AF%BC%E5%B0%81%E9%9D%A2.png'
   }, 
   {   id: 4, 
       color: '#00FF40', 
       rotate: 42, // Extreme angle
       scale: 1.16,
-      img: 'https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/%E5%8D%AB%E5%B2%97/%E5%B0%81%E9%9D%A2%E5%9B%BE.png'
+      img: 'https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/%E5%8D%AB%E5%B2%97/%E5%B0%81%E9%9D%A2%E5%9B%BE.png'
   }, 
   { 
       id: 5, 
       color: '#FFCCAA', 
       rotate: 8, 
       scale: 1.19,
-      img: 'https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/nezha/%E5%93%AA%E5%90%92%E6%B5%B7%E8%B4%BC%E7%8E%8B.png' 
+      img: 'https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/nezha/%E5%93%AA%E5%90%92%E6%B5%B7%E8%B4%BC%E7%8E%8B.png' 
   }, 
   // 🟢 NEW CARDS DATA
   { 
@@ -71,21 +72,21 @@ const heroCards = [
       color: '#E0221E', 
       rotate: 28, 
       scale: 0.84, // Small, thrown far
-      img: 'https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/animation/%E8%A7%86%E9%A2%91%E5%B0%81%E9%9D%A2.png'
+      img: 'https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/animation/%E8%A7%86%E9%A2%91%E5%B0%81%E9%9D%A2.png'
   },
   { 
       id: 7, 
       color: '#AA88EE', 
       rotate: -12, 
       scale: 1.04,
-      img: 'https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/animation/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_2026-02-02_223917_470.jpg'
+      img: 'https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/animation/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_2026-02-02_223917_470.jpg'
   },
   { 
       id: 8, 
       color: '#4ECDC4', 
       rotate: 55, // Very sharp rotation
       scale: 0.79,
-      img: 'https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/animation/Group%20951.png'
+      img: 'https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/animation/Group%20951.png'
   }
 ];
 

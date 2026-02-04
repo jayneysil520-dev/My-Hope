@@ -24,6 +24,7 @@ const SKILL_CARD_POSITIONS = [
 ];
 
 // --- DATA ---
+// Updated to China CDN
 const skills = [
     { 
         id: 's1',
@@ -32,7 +33,7 @@ const skills = [
         percentText: "92%", 
         color: "#F59E0B", 
         tags: "运营设计, 平面设计, 品牌设计",
-        previewImg: "https://cdn.jsdelivr.net/gh/jayneysil520-dev/jayneysil@main/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20260108181225_278_2.jpg",
+        previewImg: "https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20260108181225_278_2.jpg",
         previewRotate: -6,
         previewText: "HELLO?"
     },
@@ -43,7 +44,7 @@ const skills = [
         percentText: "87%", 
         color: "#3B82F6", 
         tags: "LIBLIB, Comfy UI, Web UI",
-        previewImg: "https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/capa-grass.png",
+        previewImg: "https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/capa-grass.png",
         previewRotate: 8,
         previewText: "GRASS"
     },
@@ -54,7 +55,7 @@ const skills = [
         percentText: "82%", 
         color: "#EA580C", 
         tags: "C4D, Blender, Rendering",
-        previewImg: "https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/capa-%E7%99%BD%E7%BE%8A.png",
+        previewImg: "https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/capa-%E7%99%BD%E7%BE%8A.png",
         previewRotate: -12,
         previewText: "Myself"
     },
@@ -65,7 +66,7 @@ const skills = [
         percentText: "80%", 
         color: "#8B5CF6", 
         tags: "After Effects, Premiere Pro",
-        videoUrl: "https://cdn.jsdelivr.net/gh/jayneysil520-dev/jayneysil@main/1%E6%9C%889%E6%97%A5.mp4",
+        videoUrl: "https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/1%E6%9C%889%E6%97%A5.mp4",
         previewRotate: 5,
         previewText: "Tokyo Run"
     },
@@ -77,7 +78,7 @@ const skills = [
 const softwares = [
     { 
         name: 'Fig', 
-        iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg', 
+        iconUrl: 'https://jsd.cdn.zzko.cn/gh/devicons/devicon/icons/figma/figma-original.svg', 
         color: '#F24E1E', 
         previewRotate: 15, 
         y: 0,
@@ -86,7 +87,7 @@ const softwares = [
     }, 
     { 
         name: 'Ps', 
-        iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/photoshop/photoshop-plain.svg', 
+        iconUrl: 'https://jsd.cdn.zzko.cn/gh/devicons/devicon/icons/photoshop/photoshop-plain.svg', 
         color: '#31A8FF', 
         previewRotate: -10, 
         y: 5,
@@ -94,7 +95,7 @@ const softwares = [
     }, 
     { 
         name: 'Ai', 
-        iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/illustrator/illustrator-plain.svg', 
+        iconUrl: 'https://jsd.cdn.zzko.cn/gh/devicons/devicon/icons/illustrator/illustrator-plain.svg', 
         color: '#FF9A00', 
         previewRotate: 8, 
         y: -2,
@@ -102,7 +103,7 @@ const softwares = [
     }, 
     { 
         name: 'Ae', 
-        iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/aftereffects/aftereffects-original.svg', 
+        iconUrl: 'https://jsd.cdn.zzko.cn/gh/devicons/devicon/icons/aftereffects/aftereffects-original.svg', 
         color: '#9999FF', 
         previewRotate: -15, 
         y: 12,
@@ -110,7 +111,7 @@ const softwares = [
     }, 
     { 
         name: 'Bl', 
-        iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/blender/blender-original.svg', 
+        iconUrl: 'https://jsd.cdn.zzko.cn/gh/devicons/devicon/icons/blender/blender-original.svg', 
         color: '#F5792A', 
         previewRotate: 12, 
         y: -2,
@@ -118,7 +119,7 @@ const softwares = [
     }, 
     { 
         name: 'C4D', 
-        iconUrl: 'https://cdn.jsdelivr.net/gh/jayneysil520-dev/jayneysil@main/1197px-C4D_Logo.png', 
+        iconUrl: 'https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/1197px-C4D_Logo.png', 
         color: '#2A55F5', 
         previewRotate: -8, 
         y: 6,
@@ -428,7 +429,7 @@ const Skills: React.FC = () => {
                     ))}
                 </div>
 
-                {/* 4. Mouse Image */}
+                {/* 4. Mouse Image - Updated CDN */}
                 <motion.div
                     className="absolute w-[200px] pointer-events-none will-change-transform"
                     style={{
@@ -442,7 +443,7 @@ const Skills: React.FC = () => {
                     transition={{ delay: 1, type: "spring" }}
                 >
                      <img 
-                        src="https://cdn.jsdelivr.net/gh/jayneysil520-dev/jayneysil@main/mouse-render.png" 
+                        src="https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/mouse-render.png" 
                         onError={(e) => { e.currentTarget.src = "https://cdn-icons-png.flaticon.com/512/9684/9684876.png" }}
                         alt="Mouse" 
                         className="w-full drop-shadow-xl"

@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useMemo } from 'react';
 import { motion, AnimatePresence, useTransform, useMotionValue, useSpring, useScroll, useMotionTemplate } from 'framer-motion';
 import { createPortal } from 'react-dom';
@@ -411,7 +412,8 @@ const StablePhoto: React.FC = () => {
             >
                 <div className="w-full h-full relative overflow-hidden rounded-[1.5rem] bg-gray-100 transform-style-3d">
                     <img 
-                        src="https://cdn.jsdelivr.net/gh/jayneysil520-dev/jayneysil@main/Group%20508.png" 
+                        // 🟢 Updated to China CDN
+                        src="https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/Group%20508.png" 
                         alt="Profile" 
                         className="w-full h-full object-cover filter grayscale group-hover:grayscale-0 transition-all duration-700 ease-out will-change-filter"
                         decoding="async"
