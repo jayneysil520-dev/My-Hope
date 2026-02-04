@@ -1,3 +1,4 @@
+
 import React, { useRef } from 'react';
 import { motion, useMotionValue, useSpring, useTransform, useMotionTemplate } from 'framer-motion';
 
@@ -75,7 +76,8 @@ const Spotlight3D: React.FC<Spotlight3DProps> = ({
         rotateY: disableTilt ? 0 : rotateY,
         transformStyle: "preserve-3d",
       }}
-      className={`relative group perspective-1000 transform-gpu will-change-transform ${className}`}
+      // 🟢 FIX: Removed 'will-change-transform' which causes Edge/Chrome to flatten 3D layers excessively
+      className={`relative group perspective-1000 transform-gpu ${className}`}
     >
         {/* Optimized Shadow: Use opacity transition instead of render */}
         <div 

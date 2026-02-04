@@ -273,7 +273,9 @@ export const PROJECTS_DATA = [
           {
               id: 3,
               img: 'https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/animation/2%20(3).png', 
-              video: 'https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/animation/%E6%A2%B5%E9%AB%98%E6%B5%B7%E6%B5%AA.mp4',
+              // 🟢 FIX: Updated this video to use raw GitHub URL instead of proxy to solve loading issues
+              // If you have a Vercel link for this specific video, please replace this URL.
+              video: 'https://7picw4yc54rlegc8.public.blob.vercel-storage.com/%E6%A2%B5%E9%AB%98%E6%B5%B7%E6%B5%AA.mp4',
               title: 'MoonliGht',
               width: 320,
               height: 569,

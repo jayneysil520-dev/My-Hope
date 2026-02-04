@@ -74,6 +74,8 @@ const Project2FlipVideo: React.FC<{ config: any }> = ({ config }) => {
         if (videoRef.current) {
             videoRef.current.pause();
             videoRef.current.currentTime = 0;
+            // 🟢 Resume music when closed
+            window.dispatchEvent(new Event('resume-background-music'));
         }
     };
 
@@ -184,6 +186,10 @@ const Project2FlipVideo: React.FC<{ config: any }> = ({ config }) => {
                         src={config.videoUrl}
                         className="w-full h-full object-cover"
                         controls
+                        // 🟢 Resume music on video end
+                        onEnded={() => {
+                            window.dispatchEvent(new Event('resume-background-music'));
+                        }}
                     />
                     
                     {/* Close Video Button */}
@@ -236,6 +242,8 @@ const FlipVideoCard: React.FC<{
             videoRef.current.play().catch(e => console.log("Video play failed", e));
         } else if (!isFlipped && videoRef.current) {
             videoRef.current.pause();
+            // 🟢 3. Resume Music when video is closed (unflipped) manually
+            window.dispatchEvent(new Event('resume-background-music'));
         }
     }, [isFlipped]);
 
@@ -348,9 +356,14 @@ const FlipVideoCard: React.FC<{
                         ref={videoRef}
                         src={item.video} 
                         className="w-full h-full object-cover"
-                        loop
+                        loop={false} // 🟢 Don't loop if we want to catch onEnded
                         playsInline
-                        // Muted state is controlled via useEffect above
+                        // 🟢 FIX: Handle music resume when video ends naturally
+                        onEnded={() => {
+                            window.dispatchEvent(new Event('resume-background-music'));
+                            setIsFlipped(false); // Optional: Flip back when done
+                        }}
+                        onError={(e) => console.error("Video Error:", e)}
                     />
                     {/* 🟢 REMOVED TITLE DIV AS REQUESTED */}
                 </div>
@@ -629,7 +642,8 @@ const ProjectImageSquare: React.FC<{
             onMouseLeave={onHoverEnd}
             onClick={onClick}
             
-            className="absolute cursor-pointer perspective-1000 group will-change-transform"
+            // 🟢 FIX FOR EDGE: Remove 'will-change-transform' here too
+            className="absolute cursor-pointer perspective-1000 group"
             style={{ 
                 ...style, 
                 width: SQUARE_CARD_SIZE,
