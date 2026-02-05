@@ -1,4 +1,5 @@
-import React, { useEffect, useState, useRef } from 'react';
+
+import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 
 interface LoadingScreenProps {
@@ -6,35 +7,20 @@ interface LoadingScreenProps {
 }
 
 const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
-  const [count, setCount] = useState(0);
-
+  // Timer logic for loading duration
   useEffect(() => {
-    const duration = 2000; // 2 seconds to load
-    const intervalTime = 20;
-    const steps = duration / intervalTime;
-    const increment = 100 / steps;
-
-    const timer = setInterval(() => {
-      setCount((prev) => {
-        if (prev + increment >= 100) {
-          clearInterval(timer);
-          return 100;
-        }
-        return prev + increment;
-      });
-    }, intervalTime);
-
+    const duration = 2000; // 2 seconds animation time
+    
     const completeTimeout = setTimeout(() => {
       onComplete();
-    }, duration + 500);
+    }, duration + 500); // 2.5s total time before unmount
 
     return () => {
-      clearInterval(timer);
       clearTimeout(completeTimeout);
     };
   }, [onComplete]);
 
-  // Particle Generation
+  // Particle Generation (Keeping background atmosphere)
   const particles = Array.from({ length: 20 }).map((_, i) => ({
     id: i,
     x: Math.random() * 100,
@@ -74,37 +60,36 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
             ))}
         </div>
 
-      <div className="flex flex-col items-center relative z-10">
-        {/* Counter */}
-        <div className="flex items-baseline mb-4">
-          <span className="text-8xl font-albert-light text-black tabular-nums">
-            {Math.round(count)}
-          </span>
-          <span className="text-4xl font-albert-semibold text-black ml-1">
-            %
-          </span>
+        {/* 🟢 CRIME SCENE BODY OUTLINE ANIMATION (The only foreground element) */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none" style={{ perspective: '800px' }}>
+            <motion.div
+                className="opacity-60"
+                style={{
+                    transform: "rotateX(65deg) rotateZ(-15deg) translateY(80px) scale(1.3)",
+                    transformStyle: "preserve-3d",
+                }}
+            >
+                <svg width="300" height="400" viewBox="0 0 240 360" fill="none" xmlns="http://www.w3.org/2000/svg">
+                     {/* The Drawing Path: Traces a crude human figure outline */}
+                     <motion.path
+                        d="M120 20 C140 20 155 35 155 55 C155 70 145 80 135 85 L170 95 L220 50 L230 60 L180 110 L185 210 L230 340 L200 350 L120 270 L40 350 L10 340 L55 210 L60 110 L10 60 L20 50 L70 95 L105 85 C95 80 85 70 85 55 C85 35 100 20 120 20 Z"
+                        stroke="#8B0000" // Dark Red
+                        strokeWidth="5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        fill="transparent"
+                        initial={{ pathLength: 0, opacity: 0 }}
+                        animate={{ pathLength: 1, opacity: 0.8 }}
+                        transition={{ 
+                            duration: 2.2, // Syncs with loading duration
+                            ease: "easeInOut",
+                        }}
+                    />
+                </svg>
+            </motion.div>
         </div>
 
-        {/* Dynamic Wave Progress Bar */}
-        <div className="w-64 h-2 bg-gray-100 rounded-full overflow-hidden mb-4 relative shadow-inner">
-          <motion.div 
-            className="h-full bg-blue-500 relative"
-            style={{ width: `${count}%` }}
-          >
-             {/* Wave Shine Effect */}
-             <motion.div 
-                className="absolute top-0 bottom-0 right-0 w-20 bg-gradient-to-l from-white/50 to-transparent"
-                animate={{ x: [-20, 0] }}
-                transition={{ duration: 0.5, repeat: Infinity, repeatType: "mirror" }}
-             />
-          </motion.div>
-        </div>
-
-        {/* Loading Text */}
-        <span className="text-sm font-albert-light tracking-[0.5em] text-black animate-pulse">
-            l o a d i n g
-        </span>
-      </div>
+        {/* REMOVED: Progress Bar, Counter, and Loading Text */}
     </motion.div>
   );
 };

@@ -29,6 +29,22 @@ const ORIGINAL_PLAYLIST = [
         title: "The Void", 
         url: "https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/music/6.mp3" 
     },
+    {
+        title: "Come Here", 
+        url: "https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/music/8.mp3" 
+    },
+    {
+        title: "空とぶ宅急便", 
+        url: "https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/music/9.mp3" 
+    },
+    {
+        title: "你听得到——编曲", 
+        url: "https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/music/13.mp3" 
+    },
+    {
+        title: "迷迭香", 
+        url: "https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/music/16.mp3" 
+    },
 ];
 
 const VinylLogo: React.FC = () => {
@@ -52,6 +68,29 @@ const VinylLogo: React.FC = () => {
           [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
       }
       setPlaylist(shuffled);
+  }, []);
+
+  // 🟢 2. LISTEN FOR ENABLE MUSIC EVENT (From Modal)
+  useEffect(() => {
+    const handleEnableMusic = () => {
+        if (audioRef.current) {
+            audioRef.current.volume = 0.4;
+            audioRef.current.muted = false; // Ensure unmuted
+            const playPromise = audioRef.current.play();
+            if (playPromise !== undefined) {
+                playPromise
+                  .then(() => {
+                      setIsPlaying(true);
+                      setIsMuted(false);
+                      wasPlayingRef.current = true;
+                  })
+                  .catch(e => console.log("Enable play failed", e));
+            }
+        }
+    };
+
+    window.addEventListener('enable-background-music', handleEnableMusic);
+    return () => window.removeEventListener('enable-background-music', handleEnableMusic);
   }, []);
 
   // 🟢 NEW: 监听外部暂停/恢复事件 & 全局点击恢复
@@ -117,26 +156,12 @@ const VinylLogo: React.FC = () => {
     }
   }, [currentIndex, playlist]); // Added playlist dependency
 
+  // 🟢 REMOVED AUTO-PLAY ON MOUNT
+  // We now rely on 'enable-background-music' or user interaction.
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
-
-    audio.volume = 0.4;
-
-    const attemptPlay = async () => {
-        try {
-            await audio.play();
-            setIsPlaying(true);
-            setIsMuted(false);
-        } catch (err: any) {
-            if (err.name === 'NotAllowedError') {
-                 console.log("Autoplay blocked. Waiting for interaction.");
-                 // Interaction listener logic handled by global click above mostly, 
-                 // but kept specific initial trigger just in case
-            }
-        }
-    };
-    attemptPlay();
+    audio.volume = 0.4; // Just set volume, don't play
   }, []);
 
   const handleSongEnd = () => {

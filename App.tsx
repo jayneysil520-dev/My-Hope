@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import Navbar from './components/Navbar';
@@ -8,9 +9,11 @@ import VinylProjects from './sections/VinylProjects';
 import Contact from './sections/Contact';
 import LoadingScreen from './components/LoadingScreen';
 import ScrollToTop from './components/ScrollToTop';
+import MusicConsentModal from './components/MusicConsentModal';
 
 const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
+  const [showMusicModal, setShowMusicModal] = useState(false);
 
   // Global Smooth Scroll Handler
   useEffect(() => {
@@ -42,12 +45,34 @@ const App: React.FC = () => {
     return () => document.removeEventListener('click', handleAnchorClick);
   }, []);
 
+  const handleMusicConfirm = () => {
+      setShowMusicModal(false);
+      window.dispatchEvent(new Event('enable-background-music'));
+  };
+
+  const handleMusicDecline = () => {
+      setShowMusicModal(false);
+  };
+
   return (
     <div className="bg-white min-h-screen text-black selection:bg-black selection:text-white relative">
       <AnimatePresence mode="wait">
         {isLoading && (
-          <LoadingScreen onComplete={() => setIsLoading(false)} />
+          <LoadingScreen onComplete={() => {
+              setIsLoading(false);
+              // Show music modal immediately after loading
+              setTimeout(() => setShowMusicModal(true), 500); 
+          }} />
         )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+          {showMusicModal && (
+              <MusicConsentModal 
+                  onConfirm={handleMusicConfirm}
+                  onDecline={handleMusicDecline}
+              />
+          )}
       </AnimatePresence>
 
       {!isLoading && (
