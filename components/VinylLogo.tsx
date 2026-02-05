@@ -25,6 +25,10 @@ const ORIGINAL_PLAYLIST = [
         title: "Repeat until death", 
         url: "https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/5.mp3" 
     },
+    {
+        title: "The Void", 
+        url: "https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/music/6.mp3" 
+    },
 ];
 
 const VinylLogo: React.FC = () => {
@@ -159,7 +163,7 @@ const VinylLogo: React.FC = () => {
   };
 
   const handleDiscClick = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    // 🟢 UPDATED: Removed window.scrollTo logic. Now strictly toggles music.
     
     if (audioRef.current) {
         if (audioRef.current.paused) {
