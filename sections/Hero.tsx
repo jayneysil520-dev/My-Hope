@@ -52,14 +52,14 @@ const heroCards = [
       img: 'https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/%E7%8C%BF%E8%BE%85%E5%AF%BC%E5%B0%81%E9%9D%A2.png'
   }, 
   {   id: 4, 
-      color: '#00FF40', 
+      color: '#E0221E', 
       rotate: 42, // Extreme angle
       scale: 1.16,
       img: 'https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/%E5%8D%AB%E5%B2%97/%E5%B0%81%E9%9D%A2%E5%9B%BE.png'
   }, 
   { 
       id: 5, 
-      color: '#FFCCAA', 
+      color: '#E0221E', 
       rotate: 8, 
       scale: 1.19,
       img: 'https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/nezha/%E5%93%AA%E5%90%92%E6%B5%B7%E8%B4%BC%E7%8E%8B.png' 
@@ -67,7 +67,7 @@ const heroCards = [
   // 🟢 NEW CARDS DATA
   { 
       id: 6, 
-      color: '#E0221E', 
+      color: '#0044BA', 
       rotate: 28, 
       scale: 0.84, // Small, thrown far
       img: 'https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/animation/%E8%A7%86%E9%A2%91%E5%B0%81%E9%9D%A2.png'
@@ -101,7 +101,7 @@ const ImageRevealHeroTitle: React.FC = () => {
     const [isHovered, setIsHovered] = useState(false);
 
     // Image to reveal (Pill shape reveal)
-    const REVEAL_IMAGE = "https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/animation/2%20(3).png";
+    const REVEAL_IMAGE = "https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/%E6%88%91%E8%87%AA%E5%B7%B1.png";
 
     return (
         <div 
@@ -178,6 +178,9 @@ const FloatingHeroCard: React.FC<{ card: any, index: number, hasEntered: boolean
     const randomDuration = useMemo(() => 3 + Math.random() * 2, []);
     const randomOffset = useMemo(() => 10 + Math.random() * 10, []);
 
+    // 🟢 2. Generate a random rotation angle for Hover state (-12 to 12 degrees)
+    const randomHoverRotate = useMemo(() => (Math.random() * 24 - 12), []); 
+
     return (
         <motion.div
             className={`absolute cursor-pointer ${CARD_SIZE_CLASSES} will-change-transform`}
@@ -185,7 +188,7 @@ const FloatingHeroCard: React.FC<{ card: any, index: number, hasEntered: boolean
                 top: layout.top,
                 left: layout.left,
                 aspectRatio: '1/1',
-                zIndex: layout.zIndex,
+                zIndex: layout.zIndex, // 🟢 MODIFIED: Removed 'isHovered ? 50 : ...' to keep original layering
                 transformStyle: "preserve-3d",
                 z: DEPTHS.CARDS,
             }}
@@ -198,9 +201,10 @@ const FloatingHeroCard: React.FC<{ card: any, index: number, hasEntered: boolean
             <motion.div
                 animate={{
                     y: isHovered ? -40 : [0, -randomOffset, 0],
-                    // 🟢 SCALE APPLIED HERE:
-                    scale: isHovered ? (card.scale || 1) * 1.05 : (card.scale || 1),
-                    rotate: isHovered ? 0 : [0, 1, -1, 0], 
+                    // 🟢 1. Elastic Scale: Increased to 1.2 for bigger effect
+                    scale: isHovered ? (card.scale || 1) * 1.2 : (card.scale || 1),
+                    // 🟢 2. Random Rotate: Tilt randomly instead of straightening
+                    rotate: isHovered ? randomHoverRotate : [0, 1, -1, 0], 
                 }}
                 transition={{
                     y: {
@@ -209,10 +213,18 @@ const FloatingHeroCard: React.FC<{ card: any, index: number, hasEntered: boolean
                         repeatType: "mirror", 
                         ease: "easeInOut"
                     },
-                    scale: { duration: 0.3 },
-                    rotate: { duration: isHovered ? 0.3 : 5, repeat: Infinity, repeatType: "mirror" }
+                    scale: { 
+                        type: "spring", 
+                        stiffness: 300, // High stiffness for snap
+                        damping: 15     // Low damping for bounce/elasticity
+                    },
+                    rotate: { 
+                        type: "spring", 
+                        stiffness: 300, 
+                        damping: 20 
+                    }
                 }}
-                className="w-full h-full"
+                className="w-full h-full relative"
             >
                 <Magnetic strength={30}>
                     <Spotlight3D 
@@ -221,8 +233,15 @@ const FloatingHeroCard: React.FC<{ card: any, index: number, hasEntered: boolean
                         enableElasticScale={false} 
                         spotlightColor="rgba(255,255,255,0.5)"
                     >
+                         {/* 🟢 3. Hover Color Glow (Outer Shadow) */}
+                         <motion.div 
+                            className="absolute inset-4 rounded-[2rem] blur-2xl opacity-0 transition-opacity duration-500 z-0"
+                            animate={{ opacity: isHovered ? 0.6 : 0 }}
+                            style={{ backgroundColor: card.color }}
+                        />
+
                         <div className="w-full h-full relative p-3">
-                            <div className="w-full h-full rounded-[2rem] overflow-hidden relative shadow-inner">
+                            <div className="w-full h-full rounded-[2rem] overflow-hidden relative shadow-inner bg-white">
                                 {card.img ? (
                                     <div className="w-full h-full relative group">
                                             <img 
@@ -231,7 +250,14 @@ const FloatingHeroCard: React.FC<{ card: any, index: number, hasEntered: boolean
                                             className="w-full h-full object-cover"
                                             decoding="async"
                                             />
-                                            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
+                                            {/* 🟢 3. Hover Tint (Inner Color Overlay) */}
+                                            <motion.div 
+                                                className="absolute inset-0 pointer-events-none mix-blend-overlay z-10"
+                                                animate={{ opacity: isHovered ? 0.5 : 0 }}
+                                                transition={{ duration: 0.3 }}
+                                                style={{ backgroundColor: card.color }}
+                                            />
+                                            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-300" />
                                     </div>
                                 ) : (
                                     <PatternPlaceholder color={card.color} number={card.id} />

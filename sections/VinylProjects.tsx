@@ -275,7 +275,13 @@ const FlipVideoCard: React.FC<{
             ref={cardRef}
             className="relative shrink-0 perspective-1000 cursor-pointer group"
             style={{ 
+                // 🟢 Y Position (Vertical Offset)
                 marginTop: item.y ? `${item.y}px` : '0px',
+                
+                // 🟢 X Position (Horizontal Offset / Margin Left)
+                // You can now use 'x' in your data file to push a card to the right!
+                marginLeft: item.x ? `${item.x}px` : '0px', 
+                
                 transform: `scale(${item.scale || 1})`
             }}
             // Animate container dimensions
@@ -418,6 +424,9 @@ const HorizontalScrollGallery: React.FC<{ items: any[]; color: string }> = ({ it
                 {/* Sticky viewport */}
                 <div className="sticky top-0 h-[100vh] w-full flex items-center overflow-hidden bg-black/95">
                     {/* Content moving horizontally */}
+                    {/* 🟢 ADJUST SPACING HERE: */}
+                    {/* 'gap-48' controls distance between cards. Change to gap-24 for tighter, gap-64 for looser. */}
+                    {/* 'pl-[25vw]' controls the start padding (initial offset). */}
                     <motion.div style={{ x }} className="flex items-center pl-[25vw] gap-48">
                         <div className="flex items-center shrink-0">
                             <div className="mr-12 flex flex-col justify-center min-w-[300px]">

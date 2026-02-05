@@ -106,7 +106,7 @@ export const TOOL_ICONS: Record<string, string> = {
     'ThreeJS': 'https://jsd.cdn.zzko.cn/gh/devicons/devicon/icons/threejs/threejs-original.svg', 
     'Jimeng': 'https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/%E5%8D%B3%E6%A2%A6icon.png',
     'Pinterest': 'https://jsd.cdn.zzko.cn/gh/devicons/devicon/icons/pinterest/pinterest-original.svg',
-    'LibLib': 'https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/LibLib.png'
+    'LibLib': 'https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/liblib.png'
 };
 
 // Project Data
@@ -234,8 +234,8 @@ export const PROJECTS_DATA = [
               // 🟢 USER CONFIGURATION: Card Size & Position
               width: 320, 
               height: 569, // Portrait Cover
-              flippedWidth: 320, 
-              flippedHeight: 569, 
+              flippedWidth: 484, 
+              flippedHeight: 682.4, 
               y: 0, // 🟢 Baseline
               scale: 1,
               // 🟢 NEW: Custom Introduction Text (Left of card)
@@ -261,7 +261,7 @@ export const PROJECTS_DATA = [
               y: 120, // 🟢 Lowered
               scale: 1,
               introConfig: {
-                  text: '02\nTOKYO RUN\n\nNeon lights and\ncity vibes.',
+                  text: '02\nTOKYO RUN\n\nAbstract visual\nlanguage simulation.',
                   x: -200,
                   y: 200,
                   rotate: -5,
@@ -305,12 +305,12 @@ export const PROJECTS_DATA = [
               y: 40, // 🟢 Middle
               scale: 1,
               introConfig: {
-                  text: '04\n2  6k.  m e  r\n\nAbstract forms\nin heat.',
-                  x: -208,
+                  text: '04\n2  6k.  m e  r\n\n我害怕黄昏带走我的清醒 所以疯狂的摇动手电 对抗压来的阴影\n子弹穿过我的腹腔 种植出动人的玫瑰 流血的意义 是为了清晨的诞生.',
+                  x: -165,
                   y: 300,
                   rotate: 5,
-                  fontSize: '14px',
-                  width: '180px',
+                  fontSize: '12px',
+                  width: '150px',
                   align: 'right'
               }
           }
