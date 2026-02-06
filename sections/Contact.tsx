@@ -75,7 +75,7 @@ const CONTACT_CARDS = [
     {
         id: 'xhs',
         title: 'RED NOTE',
-        value: 'Glei_Art',
+        value: '1804147528',
         color: '#FF2442', // Xiaohongshu Red
         icon: ICONS.Xiaohongshu,
         position: { x: '100%', y: '16%' }, 
