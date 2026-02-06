@@ -318,7 +318,7 @@ export const PROJECTS_DATA = [
           {
               id: 4,
               img: 'https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/animation/2%20(4).png', 
-              video: 'https://7picw4yc54rlegc8.public.blob.vercel-storage.com/%E6%9C%80%E7%BB%88%E7%89%88%E6%9C%AC%E4%BA%8C%E5%95%8A.mp4',
+              video: 'https://7picw4yc54rlegc8.public.blob.vercel-storage.com/%E6%9C%80%E7%BB%88%E7%89%88%E6%9C%AC%E4%BA%86%E5%95%8A.mp4',
               title: '2  6k.  m e  r',
               width: 320,
               height: 569,
