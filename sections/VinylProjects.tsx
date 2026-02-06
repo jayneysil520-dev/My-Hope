@@ -208,6 +208,65 @@ const Project2FlipVideo: React.FC<{ config: any }> = ({ config }) => {
     );
 };
 
+// 🟢 NEW: Clickable Video Player for absolute positioning
+const AbsoluteClickableVideo: React.FC<{ url: string, scale?: number, style?: React.CSSProperties }> = ({ url, scale = 1, style }) => {
+    const videoRef = useRef<HTMLVideoElement>(null);
+    const [isPlaying, setIsPlaying] = useState(false);
+
+    const togglePlay = () => {
+        if (!videoRef.current) return;
+        
+        if (isPlaying) {
+            videoRef.current.pause();
+            setIsPlaying(false);
+            window.dispatchEvent(new Event('resume-background-music'));
+        } else {
+            // Pause background music before playing video
+            window.dispatchEvent(new Event('pause-background-music'));
+            videoRef.current.play();
+            setIsPlaying(true);
+        }
+    };
+
+    return (
+        <div 
+            className="absolute left-0 right-0 mx-auto cursor-pointer group"
+            style={{ 
+                ...style, 
+                width: '800px', // Base width
+                transformOrigin: 'top center',
+                transform: `scale(${scale})`
+            }}
+            onClick={togglePlay}
+        >
+            <div className="relative w-full rounded-2xl overflow-hidden shadow-2xl border-4 border-white/20 bg-black">
+                <video 
+                    ref={videoRef}
+                    src={url}
+                    className="w-full h-auto block"
+                    loop
+                    playsInline
+                    onEnded={() => {
+                        setIsPlaying(false);
+                        window.dispatchEvent(new Event('resume-background-music'));
+                    }}
+                />
+                
+                {/* Play Overlay */}
+                {!isPlaying && (
+                    <div className="absolute inset-0 bg-black/40 flex items-center justify-center backdrop-blur-sm group-hover:bg-black/20 transition-all duration-300">
+                        <div className="w-20 h-20 rounded-full bg-white/20 border border-white/50 backdrop-blur-md flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                             <svg width="32" height="32" viewBox="0 0 24 24" fill="white" stroke="none">
+                                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                            </svg>
+                        </div>
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+};
+
 // 🟢 NEW: Flip Card Component for Project 6 (Updated with Dynamic Size & Spotlight Border)
 const FlipVideoCard: React.FC<{ 
     item: any; 
@@ -927,7 +986,8 @@ const GalleryModalView: React.FC<{ images: string[], projectId?: number, project
                     className="flex flex-col w-full relative"
                     style={{ 
                         // Project 1 needs specific height for absolute elements (max Y is ~10420px)
-                        minHeight: projectId === 1 ? '11000px' : 'auto' 
+                        // Project 2: Changed to 'auto' to adapt to content height (fixed black space issue)
+                        minHeight: projectId === 1 ? '11000px' : 'auto'
                     }}
                 >
                     
@@ -978,10 +1038,16 @@ const GalleryModalView: React.FC<{ images: string[], projectId?: number, project
                                 </div>
                             )}
 
-                            {/* 🟢 NOTE: Video Interaction was moved to the fixed layer above */}
-
                             {/* 8 Existing Cards - Now Full Width Stack */}
-                            <div className="w-full flex flex-col relative z-10">
+                            {/* 🟢 DYNAMIC HEIGHT FIX: Apply negative margin based on last card's offset to collapse empty space */}
+                            <div 
+                                className="w-full flex flex-col relative z-10"
+                                style={{
+                                    marginBottom: project.project2Config.cards && project.project2Config.cards.length > 0
+                                        ? `${project.project2Config.cards[project.project2Config.cards.length - 1].y}px`
+                                        : '0px'
+                                }}
+                            >
                                 {project.project2Config.cards && project.project2Config.cards.map((card: any) => {
                                     // 🟢 ANIMATION LOGIC: Cards 3-7 (Indices 2-6)
                                     const shouldAnimate = card.id >= 3 && card.id <= 7;
@@ -995,20 +1061,53 @@ const GalleryModalView: React.FC<{ images: string[], projectId?: number, project
                                             className="w-full h-auto block relative"
                                             loading="lazy"
                                             // Animation Properties
-                                            // Start state: offset 150px lower (closer to scroll bottom) and invisible
                                             initial={{ 
                                                 opacity: shouldAnimate ? 0 : 1, 
                                                 y: shouldAnimate ? finalY + 150 : finalY 
                                             }}
-                                            // End state: move to final position and fade in when in view
                                             whileInView={shouldAnimate ? { opacity: 1, y: finalY } : undefined}
-                                            // Trigger slightly before element is fully in view (-100px margin)
                                             viewport={{ once: true, margin: "-100px" }}
                                             transition={{ duration: 0.8, ease: "easeOut" }}
                                         />
                                     );
                                 })}
                             </div>
+
+                            {/* 🟢 NEW: Extra Content Render (Absolute Positioning) */}
+                            {project.project2Config.extraContent && project.project2Config.extraContent.map((item: any, idx: number) => (
+                                <div 
+                                    key={idx}
+                                    className="absolute w-full flex justify-center pointer-events-auto"
+                                    style={{ 
+                                        top: `${item.y}px`, 
+                                        zIndex: item.zIndex || 30 
+                                    }}
+                                >
+                                    {item.type === 'image' && (
+                                        <motion.img 
+                                            src={item.url}
+                                            className="block h-auto"
+                                            style={{ 
+                                                width: item.width ? `${item.width}px` : '100%',
+                                                maxWidth: '100%'
+                                            }}
+                                            // 🟢 UPDATED: Added X and Rotate support
+                                            // Apply X and Rotate. Since parent is flex-center, x acts as offset from center.
+                                            initial={{ opacity: 0, y: 50, x: item.x || 0, rotate: item.rotate || 0 }}
+                                            whileInView={{ opacity: 1, y: 0, x: item.x || 0, rotate: item.rotate || 0 }}
+                                            transition={{ duration: 0.8 }}
+                                        />
+                                    )}
+
+                                    {item.type === 'video' && (
+                                        <AbsoluteClickableVideo 
+                                            url={item.url} 
+                                            scale={item.scale} 
+                                        />
+                                    )}
+                                </div>
+                            ))}
+
                         </div>
                     ) : (
                         // Default rendering for other projects
@@ -1028,8 +1127,6 @@ const GalleryModalView: React.FC<{ images: string[], projectId?: number, project
                     {/* --- CUSTOM OVERLAY TEXTS FOR PROJECT 1 --- */}
                     {projectId === 1 && (
                         <>
-                            {/* TEXT OVERLAYS REMOVED AS REQUESTED */}
-
                             {/* --- 6. NEW: GROUP 1 CARDS (Updated with Hover Effects) --- */}
                             {GROUP_1_CARDS_DATA.map(card => (
                                 <HoverCard 

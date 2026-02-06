@@ -156,16 +156,38 @@ export const PROJECTS_DATA = [
             width: 280
         },
         cards: [
-            { id: 1, url: 'https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/%E8%9B%8B%E4%BB%94%E6%B4%BE%E5%AF%B9/%E5%8D%A1%E7%89%871.png', y: 0 },
+            { id: 1, url: 'https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/%E8%9B%8B%E4%BB%94%E6%B4%BE%E5%AF%B9/%E5%8D%A1%E7%89%871.png', y: 0 },
             { id: 2, url: 'https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/%E8%9B%8B%E4%BB%94%E6%B4%BE%E5%AF%B9/%E5%8D%A1%E7%89%872.png', y: -348 },
             { id: 3, url: 'https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/%E8%9B%8B%E4%BB%94%E6%B4%BE%E5%AF%B9/%E5%8D%A1%E7%89%873.png', y: -620 },
-            { id: 4, url: 'https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/%E8%9B%8B%E4%BB%94%E6%B4%BE%E5%AF%B9/%E5%8D%A1%E7%89%874.png', y: -920 },
-            { id: 5, url: 'https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/%E8%9B%8B%E4%BB%94%E6%B4%BE%E5%AF%B9/%E5%8D%A1%E7%89%875.png', y: -1300 },
-            { id: 6, url: 'https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/%E8%9B%8B%E4%BB%94%E6%B4%BE%E5%AF%B9/%E5%8D%A1%E7%89%876.png', y: -1400 },
-            { id: 7, url: 'https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/%E8%9B%8B%E4%BB%94%E6%B4%BE%E5%AF%B9/%E5%8D%A1%E7%89%877.png', y: -1600 },
-            { id: 8, url: 'https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/%E8%9B%8B%E4%BB%94%E6%B4%BE%E5%AF%B9/%E5%8D%A1%E7%89%878.png', y: -2000 },
+            { id: 4, url: 'https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/%E8%9B%8B%E4%BB%94%E6%B4%BE%E5%AF%B9/%E5%8D%A1%E7%89%874.png', y: -1080 },
+            { id: 5, url: 'https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/%E8%9B%8B%E4%BB%94%E6%B4%BE%E5%AF%B9/%E5%8D%A1%E7%89%875.png', y: -1800 },
+            { id: 6, url: 'https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/%E8%9B%8B%E4%BB%94%E6%B4%BE%E5%AF%B9/%E5%8D%A1%E7%89%876.png', y: -2580 },
+            { id: 7, url: 'https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/%E8%9B%8B%E4%BB%94%E6%B4%BE%E5%AF%B9/%E5%8D%A1%E7%89%877-2.png', y: -3430 },
+            { id: 8, url: 'https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/%E8%9B%8B%E4%BB%94%E6%B4%BE%E5%AF%B9/%E5%8D%A1%E7%89%878.png', y: -3770 },
         ],
-        // 🟢 NEW: Video Interaction Configuration
+        // 🟢 NEW: Extra Absolute Content (Images & Videos)
+        extraContent: [
+            { 
+                type: 'image', 
+                y: 445, 
+                url: 'https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/%E8%9B%8B%E4%BB%94%E6%B4%BE%E5%AF%B9/%E7%A4%BC%E5%8C%85.png',
+                width: 245, // Full width
+                zIndex: 25,
+                x: 380,      // 👈 X轴偏移 (Offset from center in px)
+                rotate: 12  // 👈 旋转角度
+            },
+            { 
+                type: 'image', 
+                y: 400, 
+                url: 'https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/%E8%9B%8B%E4%BB%94%E6%B4%BE%E5%AF%B9/%E7%A4%BC%E5%8C%851.png',
+                width: 125,
+                zIndex: 26,
+                x: 80,      // 👈 X轴偏移
+                rotate: -2  // 👈 旋转角度
+            }
+            // Video Removed as requested
+        ],
+        // 🟢 Video Interaction Configuration (The floating one)
         videoInteraction: {
             y: 400, // Position Y from top
             // NOTE: Vercel Blob is retained as I cannot move it, but other assets are optimized.
@@ -296,7 +318,7 @@ export const PROJECTS_DATA = [
           {
               id: 4,
               img: 'https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/animation/2%20(4).png', 
-              video: 'https://7picw4yc54rlegc8.public.blob.vercel-storage.com/%E6%9C%80%E7%BB%88%E7%89%88%E6%9C%AC%E4%BA%86%E5%95%8A.mp4',
+              video: 'https://7picw4yc54rlegc8.public.blob.vercel-storage.com/%E6%9C%80%E7%BB%88%E7%89%88%E6%9C%AC%E4%BA%8C%E5%95%8A.mp4',
               title: '2  6k.  m e  r',
               width: 320,
               height: 569,
