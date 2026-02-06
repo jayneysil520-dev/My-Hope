@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 // --- 音乐播放列表配置 ---
 // FIX: Using jsd.cdn.zzko.cn for China accessibility and speed
+// Replaced all raw.githubusercontent.com links with CDN mirrors
 const ORIGINAL_PLAYLIST = [
     {
         title: "Head in the clouds",
@@ -27,23 +28,23 @@ const ORIGINAL_PLAYLIST = [
     },
     {
         title: "The Void", 
-        url: "https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/music/6.mp3" 
+        url: "https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/music/6.mp3" 
     },
     {
         title: "Come Here", 
-        url: "https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/music/8.mp3" 
+        url: "https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/music/8.mp3" 
     },
     {
         title: "空とぶ宅急便", 
-        url: "https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/music/9.mp3" 
+        url: "https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/music/9.mp3" 
     },
     {
         title: "你听得到——编曲", 
-        url: "https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/music/13.mp3" 
+        url: "https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/music/13.mp3" 
     },
     {
         title: "迷迭香", 
-        url: "https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/music/16.mp3" 
+        url: "https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/music/16.mp3" 
     },
 ];
 

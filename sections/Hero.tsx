@@ -101,7 +101,8 @@ const ImageRevealHeroTitle: React.FC = () => {
     const [isHovered, setIsHovered] = useState(false);
 
     // Image to reveal (Pill shape reveal)
-    const REVEAL_IMAGE = "https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/%E6%88%91%E8%87%AA%E5%B7%B1.png";
+    // 🟢 UPDATED: Using China CDN for speed
+    const REVEAL_IMAGE = "https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/%E6%88%91%E8%87%AA%E5%B7%B1.png";
 
     return (
         <div 

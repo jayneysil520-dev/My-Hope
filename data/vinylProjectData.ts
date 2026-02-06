@@ -106,7 +106,7 @@ export const TOOL_ICONS: Record<string, string> = {
     'ThreeJS': 'https://jsd.cdn.zzko.cn/gh/devicons/devicon/icons/threejs/threejs-original.svg', 
     'Jimeng': 'https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/%E5%8D%B3%E6%A2%A6icon.png',
     'Pinterest': 'https://jsd.cdn.zzko.cn/gh/devicons/devicon/icons/pinterest/pinterest-original.svg',
-    'LibLib': 'https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/liblib.png'
+    'LibLib': 'https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/liblib.png'
 };
 
 // Project Data
@@ -156,13 +156,13 @@ export const PROJECTS_DATA = [
             width: 280
         },
         cards: [
-            { id: 1, url: 'https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/%E8%9B%8B%E4%BB%94%E6%B4%BE%E5%AF%B9/%E5%8D%A1%E7%89%871.png', y: 0 },
+            { id: 1, url: 'https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/%E8%9B%8B%E4%BB%94%E6%B4%BE%E5%AF%B9/%E5%8D%A1%E7%89%871.png', y: 0 },
             { id: 2, url: 'https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/%E8%9B%8B%E4%BB%94%E6%B4%BE%E5%AF%B9/%E5%8D%A1%E7%89%872.png', y: -348 },
             { id: 3, url: 'https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/%E8%9B%8B%E4%BB%94%E6%B4%BE%E5%AF%B9/%E5%8D%A1%E7%89%873.png', y: -620 },
             { id: 4, url: 'https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/%E8%9B%8B%E4%BB%94%E6%B4%BE%E5%AF%B9/%E5%8D%A1%E7%89%874.png', y: -1080 },
             { id: 5, url: 'https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/%E8%9B%8B%E4%BB%94%E6%B4%BE%E5%AF%B9/%E5%8D%A1%E7%89%875.png', y: -1800 },
             { id: 6, url: 'https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/%E8%9B%8B%E4%BB%94%E6%B4%BE%E5%AF%B9/%E5%8D%A1%E7%89%876.png', y: -2580 },
-            { id: 7, url: 'https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/%E8%9B%8B%E4%BB%94%E6%B4%BE%E5%AF%B9/%E5%8D%A1%E7%89%877-2.png', y: -3430 },
+            { id: 7, url: 'https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/%E8%9B%8B%E4%BB%94%E6%B4%BE%E5%AF%B9/%E5%8D%A1%E7%89%877-2.png', y: -3430 },
             { id: 8, url: 'https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/%E8%9B%8B%E4%BB%94%E6%B4%BE%E5%AF%B9/%E5%8D%A1%E7%89%878.png', y: -3770 },
         ],
         // 🟢 NEW: Extra Absolute Content (Images & Videos)
@@ -170,7 +170,7 @@ export const PROJECTS_DATA = [
             { 
                 type: 'image', 
                 y: 445, 
-                url: 'https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/%E8%9B%8B%E4%BB%94%E6%B4%BE%E5%AF%B9/%E7%A4%BC%E5%8C%85.png',
+                url: 'https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/%E8%9B%8B%E4%BB%94%E6%B4%BE%E5%AF%B9/%E7%A4%BC%E5%8C%85.png',
                 width: 245, // Full width
                 zIndex: 25,
                 x: 380,      // 👈 X轴偏移 (Offset from center in px)
@@ -179,7 +179,7 @@ export const PROJECTS_DATA = [
             { 
                 type: 'image', 
                 y: 400, 
-                url: 'https://raw.githubusercontent.com/jayneysil520-dev/jayneysil/refs/heads/main/%E8%9B%8B%E4%BB%94%E6%B4%BE%E5%AF%B9/%E7%A4%BC%E5%8C%851.png',
+                url: 'https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/%E8%9B%8B%E4%BB%94%E6%B4%BE%E5%AF%B9/%E7%A4%BC%E5%8C%851.png',
                 width: 125,
                 zIndex: 26,
                 x: 80,      // 👈 X轴偏移
