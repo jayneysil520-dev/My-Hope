@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState, useRef } from 'react';
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform, useMotionTemplate } from 'framer-motion';
 
@@ -192,7 +193,8 @@ const SpotlightRow: React.FC<{
 
 const ExperienceModal: React.FC<ExperienceModalProps> = ({ isOpen, onClose }) => {
   const [selectedItem, setSelectedItem] = useState<ExperienceItem | null>(null);
-  const [photoUrl, setPhotoUrl] = useState<string>("https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1000&auto=format&fit=crop");
+  // 🇨🇳 CHINA OPTIMIZATION: Replaced Unsplash URL with jsDelivr mirror asset
+  const [photoUrl, setPhotoUrl] = useState<string>("https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/Group%20508.png");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {

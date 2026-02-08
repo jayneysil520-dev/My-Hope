@@ -232,8 +232,8 @@ const AbsoluteClickableVideo: React.FC<{ url: string, scale?: number, style?: Re
         <div 
             className="absolute left-0 right-0 mx-auto cursor-pointer group"
             style={{ 
-                ...style, 
-                width: '800px', // Base width
+                width: '800px', // Default width
+                ...style, // Allow override
                 transformOrigin: 'top center',
                 transform: `scale(${scale})`
             }}
@@ -987,7 +987,8 @@ const GalleryModalView: React.FC<{ images: string[], projectId?: number, project
                     style={{ 
                         // Project 1 needs specific height for absolute elements (max Y is ~10420px)
                         // Project 2: Changed to 'auto' to adapt to content height (fixed black space issue)
-                        minHeight: projectId === 1 ? '11000px' : 'auto'
+                        // Project 4: Needs specific height for absolute elements at ~16400px
+                        minHeight: projectId === 1 ? '11000px' : (projectId === 4 ? '18000px' : 'auto')
                     }}
                 >
                     
@@ -1111,17 +1112,56 @@ const GalleryModalView: React.FC<{ images: string[], projectId?: number, project
                         </div>
                     ) : (
                         // Default rendering for other projects
-                        images.map((imgUrl, index) => (
-                            <div key={index} className="w-full bg-black">
-                                <img 
-                                    src={imgUrl} 
-                                    className="w-full h-auto block" 
-                                    loading="lazy" 
-                                    decoding="async" 
-                                    alt={`Project Detail ${index + 1}`} 
-                                />
-                            </div>
-                        ))
+                        <>
+                            {images.map((imgUrl, index) => (
+                                <div key={index} className="w-full bg-black">
+                                    <img 
+                                        src={imgUrl} 
+                                        className="w-full h-auto block" 
+                                        loading="lazy" 
+                                        decoding="async" 
+                                        alt={`Project Detail ${index + 1}`} 
+                                    />
+                                </div>
+                            ))}
+
+                            {/* 🟢 NEW: Generic Extra Content Render (Absolute Positioning) */}
+                            {project?.extraContent?.map((item: any, idx: number) => (
+                                <div 
+                                    key={`extra-${idx}`}
+                                    className="absolute w-full flex justify-center pointer-events-auto"
+                                    style={{ 
+                                        top: `${item.y}px`, 
+                                        zIndex: item.zIndex || 30 
+                                    }}
+                                >
+                                    {item.type === 'image' && (
+                                        <motion.img 
+                                            src={item.url}
+                                            className="block h-auto"
+                                            style={{ 
+                                                width: item.width ? `${item.width}px` : '100%',
+                                                maxWidth: '100%'
+                                            }}
+                                            initial={{ opacity: 0, y: 50, x: item.x || 0, rotate: item.rotate || 0 }}
+                                            whileInView={{ opacity: 1, y: 0, x: item.x || 0, rotate: item.rotate || 0 }}
+                                            transition={{ duration: 0.8 }}
+                                        />
+                                    )}
+
+                                    {item.type === 'video' && (
+                                        <AbsoluteClickableVideo 
+                                            url={item.url} 
+                                            scale={item.scale || 1}
+                                            style={{
+                                                width: item.width ? `${item.width}px` : undefined,
+                                                marginLeft: item.x ? `${item.x}px` : undefined
+                                            }}
+                                        />
+                                    )}
+                                </div>
+                            ))}
+                        </>
                     )}
 
                     {/* --- CUSTOM OVERLAY TEXTS FOR PROJECT 1 --- */}

@@ -42,10 +42,6 @@ const ORIGINAL_PLAYLIST = [
         title: "你听得到——编曲", 
         url: "https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/music/13.mp3" 
     },
-    {
-        title: "迷迭香", 
-        url: "https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/music/16.mp3" 
-    },
 ];
 
 const VinylLogo: React.FC = () => {

@@ -113,17 +113,58 @@ const App: React.FC = () => {
 
           <motion.footer 
             id="contact-footer" 
-            initial={{ opacity: 0, scale: 0.9, y: 20 }}
-            whileInView={{ opacity: 1, scale: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            viewport={{ once: true, margin: "-100px" }}
-            className="relative z-[60] py-12 text-center text-gray-400 text-sm font-albert-light bg-white border-t border-gray-100"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ duration: 1.5, ease: "easeOut" }}
+            viewport={{ once: true, margin: "-50px" }}
+            className="relative z-[60] py-24 bg-white border-t border-gray-100 flex items-center justify-center overflow-hidden"
           >
-            <div className="mb-4">
-                <h3 className="text-xl font-bold text-black mb-2">CONTACT</h3>
-                <p>glei.design@example.com</p>
-            </div>
-            <p>&copy; {new Date().getFullYear()} zhanG minGlei. All Rights Reserved.</p>
+             {/* 
+                🟢 STATIC CHALK FIGURE (Footer Signature) 
+                Matching the LoadingScreen style but static and centered
+             */}
+             <div 
+                className="opacity-60 grayscale hover:grayscale-0 transition-all duration-700"
+                style={{
+                    // Consistent with your requested adjusted perspective (smaller angle)
+                    transform: "rotateX(40deg) rotateZ(-10deg) scale(0.6)", 
+                    transformStyle: "preserve-3d",
+                    perspective: "800px"
+                }}
+             >
+                <svg width="300" height="400" viewBox="0 0 240 360" fill="none" xmlns="http://www.w3.org/2000/svg">
+                     <defs>
+                        <filter id="chalk-roughness-footer">
+                            <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" result="noise" />
+                            <feDisplacementMap in="SourceGraphic" in2="noise" scale="3" xChannelSelector="R" yChannelSelector="G" />
+                        </filter>
+                     </defs>
+
+                     {/* Main Line - Static (pathLength 1) */}
+                     <path
+                        d="M120 20 C140 20 155 35 155 55 C155 70 145 80 135 85 L170 95 L220 50 L230 60 L180 110 L185 210 L230 340 L200 350 L120 270 L40 350 L10 340 L55 210 L60 110 L10 60 L20 50 L70 95 L105 85 C95 80 85 70 85 55 C85 35 100 20 120 20 Z"
+                        stroke="#8B0000"
+                        strokeWidth="3"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        fill="transparent"
+                        filter="url(#chalk-roughness-footer)"
+                        opacity="0.8"
+                    />
+                    
+                    {/* Texture Layer - Static */}
+                    <path
+                        d="M120 20 C140 20 155 35 155 55 C155 70 145 80 135 85 L170 95 L220 50 L230 60 L180 110 L185 210 L230 340 L200 350 L120 270 L40 350 L10 340 L55 210 L60 110 L10 60 L20 50 L70 95 L105 85 C95 80 85 70 85 55 C85 35 100 20 120 20 Z"
+                        stroke="#8B0000"
+                        strokeWidth="1"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        fill="transparent"
+                        opacity="0.4"
+                        filter="url(#chalk-roughness-footer)"
+                    />
+                </svg>
+             </div>
           </motion.footer>
         </>
       )}

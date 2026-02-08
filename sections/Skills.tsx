@@ -78,6 +78,7 @@ const skills = [
 const softwares = [
     { 
         name: 'Fig', 
+        // 🇨🇳 CHINA OPTIMIZATION: Using jsd.cdn.zzko.cn mirror
         iconUrl: 'https://jsd.cdn.zzko.cn/gh/devicons/devicon/icons/figma/figma-original.svg', 
         color: '#F24E1E', 
         previewRotate: 15, 
@@ -87,6 +88,7 @@ const softwares = [
     }, 
     { 
         name: 'Ps', 
+        // 🇨🇳 CHINA OPTIMIZATION: Using jsd.cdn.zzko.cn mirror
         iconUrl: 'https://jsd.cdn.zzko.cn/gh/devicons/devicon/icons/photoshop/photoshop-plain.svg', 
         color: '#31A8FF', 
         previewRotate: -10, 
@@ -95,6 +97,7 @@ const softwares = [
     }, 
     { 
         name: 'Ai', 
+        // 🇨🇳 CHINA OPTIMIZATION: Using jsd.cdn.zzko.cn mirror
         iconUrl: 'https://jsd.cdn.zzko.cn/gh/devicons/devicon/icons/illustrator/illustrator-plain.svg', 
         color: '#FF9A00', 
         previewRotate: 8, 
@@ -103,6 +106,7 @@ const softwares = [
     }, 
     { 
         name: 'Ae', 
+        // 🇨🇳 CHINA OPTIMIZATION: Using jsd.cdn.zzko.cn mirror
         iconUrl: 'https://jsd.cdn.zzko.cn/gh/devicons/devicon/icons/aftereffects/aftereffects-original.svg', 
         color: '#9999FF', 
         previewRotate: -15, 
@@ -111,6 +115,7 @@ const softwares = [
     }, 
     { 
         name: 'Bl', 
+        // 🇨🇳 CHINA OPTIMIZATION: Using jsd.cdn.zzko.cn mirror
         iconUrl: 'https://jsd.cdn.zzko.cn/gh/devicons/devicon/icons/blender/blender-original.svg', 
         color: '#F5792A', 
         previewRotate: 12, 

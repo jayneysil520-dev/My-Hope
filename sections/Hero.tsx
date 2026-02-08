@@ -296,7 +296,7 @@ const Hero: React.FC = () => {
         y.set(clientY / h - 0.5);
     };
 
-    const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["35deg", "25deg"]);
+    const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["50deg", "35deg"]);
     const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-5deg", "5deg"]);
     const translateX = useTransform(mouseXSpring, [-0.5, 0.5], ["-2%", "2%"]);
 

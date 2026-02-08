@@ -95,6 +95,7 @@ export const CUSTOM_NEW_IMAGES = [
     }
 ];
 
+// 🇨🇳 CHINA OPTIMIZATION: Replaced standard CDNs with jsDelivr mirror for speed
 export const TOOL_ICONS: Record<string, string> = {
     'Figma': 'https://jsd.cdn.zzko.cn/gh/devicons/devicon/icons/figma/figma-original.svg',
     'PS': 'https://jsd.cdn.zzko.cn/gh/devicons/devicon/icons/photoshop/photoshop-plain.svg',
@@ -219,7 +220,19 @@ export const PROJECTS_DATA = [
       // 🟢 REMOVED: topSequenceConfig deleted as requested
       detailImages: [
           'https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/%E5%8D%AB%E5%B2%97/%E5%8D%AB%E5%B2%97%E9%95%BF%E5%9B%BE1.png',
-          'https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/%E5%8D%AB%E5%B2%97/%E5%8D%AB%E5%B2%97%E9%95%BF%E5%9B%BE2.png'
+          // 🇨🇳 CHINA OPTIMIZATION: Updated raw github URL to jsDelivr mirror
+          'https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/%E5%8D%AB%E5%B2%97/%E5%8D%AB%E5%B2%97%E9%95%BF%E5%9B%BE%E6%9C%89%E8%A7%86%E9%A2%912.png'
+      ],
+      // 🟢 NEW: Extra Content for Project 4 (Video at Y 16600 - LOCKED)
+      extraContent: [
+          {
+              type: 'video',
+              url: 'https://7picw4yc54rlegc8.public.blob.vercel-storage.com/%E5%8D%AB%E5%B2%97%E7%89%9B%E5%A5%B6.mp4',
+              y: 16600, // 🔒 LOCKED: Positioned exactly as requested
+              width: 800, // You can adjust width here
+              scale: 1,
+              x: 0 // Center adjusted
+          }
       ]
   },
   { 
@@ -348,10 +361,11 @@ export const PROJECTS_DATA = [
       desc: 'A collection of personal experiments and visual explorations.', 
       tools: ['Blender', 'PS', 'AI'], 
       layout: 'gallery',
+      // 🇨🇳 CHINA OPTIMIZATION: Replaced Unsplash images with available GitHub assets to prevent blocking
       detailImages: [
-          'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=1000&auto=format&fit=crop',
-          'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1000&auto=format&fit=crop',
-          'https://images.unsplash.com/photo-1515405295579-ba7f45403022?q=80&w=1000&auto=format&fit=crop'
+          'https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/animation/2%20(1).png',
+          'https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/animation/2%20(2).png',
+          'https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/animation/2%20(3).png'
       ]
   },
   { 
