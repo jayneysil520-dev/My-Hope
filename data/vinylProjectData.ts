@@ -303,7 +303,7 @@ export const PROJECTS_DATA = [
               id: 3,
               img: 'https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/animation/2%20(3).png', 
               // 🟢 ⚠️ 视频修复: 已替换为 GitHub Mirror 链接 (请务必上传 '梵高海浪.mp4' 到仓库根目录)
-              video: 'https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/%E6%A2%B5%E9%AB%98%E6%B5%B7%E6%B5%AA.mp4',
+              video: 'https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/redpandacompress_%E6%A2%B5%E9%AB%98%E6%B5%B7%E6%B5%AA.mp4',
               title: 'MoonliGht',
               width: 320,
               height: 569,
