@@ -56,6 +56,7 @@ const DEPTHS = {
 const Project2FlipVideo: React.FC<{ config: any }> = ({ config }) => {
     const [isFlipped, setIsFlipped] = useState(false);
     const [isHidden, setIsHidden] = useState(false); // 🟢 NEW: Hidden State
+    const [isLoading, setIsLoading] = useState(true); // 🟢 NEW: Loading State
     const videoRef = useRef<HTMLVideoElement>(null);
     const justHiddenRef = useRef(false); // 🟢 NEW: Prevents instant restore on hover
 
@@ -155,7 +156,6 @@ const Project2FlipVideo: React.FC<{ config: any }> = ({ config }) => {
                     </div>
 
                     {/* INDEPENDENT CLOSE BUTTON AREA */}
-                    {/* Rendered conditionally and positioned absolutely on top */}
                     {!isFlipped && !isHidden && (
                         <div 
                             className="absolute -top-3 -right-3 w-10 h-10 z-[100] flex items-center justify-center cursor-pointer pointer-events-auto opacity-0 group-hover:opacity-100 transition-opacity duration-300"
@@ -181,11 +181,21 @@ const Project2FlipVideo: React.FC<{ config: any }> = ({ config }) => {
                     className="absolute inset-0 backface-hidden rounded-2xl overflow-hidden bg-black shadow-2xl border border-white/20"
                     style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
                 >
+                    {/* 🟢 LOADING SPINNER */}
+                    {isLoading && (
+                        <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
+                            <div className="w-8 h-8 border-4 border-white/20 border-t-white rounded-full animate-spin" />
+                        </div>
+                    )}
+
                     <video 
                         ref={videoRef}
                         src={config.videoUrl}
                         className="w-full h-full object-cover"
                         controls
+                        preload="metadata" // 🟢 OPTIMIZATION: metadata only first
+                        onWaiting={() => setIsLoading(true)}
+                        onCanPlay={() => setIsLoading(false)}
                         // 🟢 Resume music on video end
                         onEnded={() => {
                             window.dispatchEvent(new Event('resume-background-music'));
@@ -212,6 +222,7 @@ const Project2FlipVideo: React.FC<{ config: any }> = ({ config }) => {
 const AbsoluteClickableVideo: React.FC<{ url: string, scale?: number, style?: React.CSSProperties }> = ({ url, scale = 1, style }) => {
     const videoRef = useRef<HTMLVideoElement>(null);
     const [isPlaying, setIsPlaying] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
 
     const togglePlay = () => {
         if (!videoRef.current) return;
@@ -239,13 +250,23 @@ const AbsoluteClickableVideo: React.FC<{ url: string, scale?: number, style?: Re
             }}
             onClick={togglePlay}
         >
-            <div className="relative w-full rounded-2xl overflow-hidden shadow-2xl border-4 border-white/20 bg-black">
+            <div className="relative w-full rounded-2xl overflow-hidden shadow-2xl border-4 border-white/20 bg-black min-h-[400px]">
+                {/* 🟢 LOADING SPINNER */}
+                {isLoading && (
+                    <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
+                        <div className="w-10 h-10 border-4 border-white/20 border-t-white rounded-full animate-spin" />
+                    </div>
+                )}
+                
                 <video 
                     ref={videoRef}
                     src={url}
                     className="w-full h-auto block"
                     loop
                     playsInline
+                    preload="metadata"
+                    onWaiting={() => setIsLoading(true)}
+                    onCanPlay={() => setIsLoading(false)}
                     onEnded={() => {
                         setIsPlaying(false);
                         window.dispatchEvent(new Event('resume-background-music'));
@@ -253,7 +274,7 @@ const AbsoluteClickableVideo: React.FC<{ url: string, scale?: number, style?: Re
                 />
                 
                 {/* Play Overlay */}
-                {!isPlaying && (
+                {!isPlaying && !isLoading && (
                     <div className="absolute inset-0 bg-black/40 flex items-center justify-center backdrop-blur-sm group-hover:bg-black/20 transition-all duration-300">
                         <div className="w-20 h-20 rounded-full bg-white/20 border border-white/50 backdrop-blur-md flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
                              <svg width="32" height="32" viewBox="0 0 24 24" fill="white" stroke="none">
@@ -276,6 +297,7 @@ const FlipVideoCard: React.FC<{
     setActiveVideoIndex: (idx: number) => void; 
 }> = ({ item, index, color, activeVideoIndex, setActiveVideoIndex }) => {
     const [isFlipped, setIsFlipped] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const videoRef = useRef<HTMLVideoElement>(null);
     const cardRef = useRef<HTMLDivElement>(null);
     
@@ -436,12 +458,22 @@ const FlipVideoCard: React.FC<{
                         transform: 'rotateY(180deg)' 
                     }}
                 >
+                    {/* 🟢 LOADING SPINNER */}
+                    {isLoading && (
+                        <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
+                            <div className="w-8 h-8 border-4 border-white/20 border-t-white rounded-full animate-spin" />
+                        </div>
+                    )}
+
                     <video 
                         ref={videoRef}
                         src={item.video} 
                         className="w-full h-full object-cover"
                         loop={false} // 🟢 Don't loop if we want to catch onEnded
                         playsInline
+                        preload="metadata"
+                        onWaiting={() => setIsLoading(true)}
+                        onCanPlay={() => setIsLoading(false)}
                         // 🟢 FIX: Handle music resume when video ends naturally
                         onEnded={() => {
                             window.dispatchEvent(new Event('resume-background-music'));

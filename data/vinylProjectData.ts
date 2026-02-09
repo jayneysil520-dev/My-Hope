@@ -1,4 +1,5 @@
 
+
 // 🔒 LOCKED DATA: USER CONFIGURATION
 // Please do not overwrite this file with placeholder data in future updates.
 
@@ -126,7 +127,6 @@ export const PROJECTS_DATA = [
       scrollVideoUrl: ASSETS.P1_VID_1,
       scrollVideoUrl2: ASSETS.P1_VID_2,
       sequenceConfig1: {
-          // 🟢 CRITICAL: This was a raw link, causing slow sequence loading. Updated to CDN.
           baseUrl: 'https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/arm/ezgif-frame-', 
           suffix: '.png',
           digits: 3,       
@@ -152,8 +152,8 @@ export const PROJECTS_DATA = [
         // Images will now automatically fill the width of the modal (1000px).
         phoneImage: {
             url: 'https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/%E8%9B%8B%E4%BB%94%E6%B4%BE%E5%AF%B9/%E6%89%8B%E6%9C%BA%E5%B1%8F%E5%B9%95.png',
-            x: 607, // 👈 X Axis (Left Position in px) - Adjust this to move Left/Right
-            y: 660,  // 👈 Y Axis (Top Position in px) - Adjust this to move Up/Down
+            x: 607, 
+            y: 660, 
             width: 280
         },
         cards: [
@@ -172,10 +172,10 @@ export const PROJECTS_DATA = [
                 type: 'image', 
                 y: 445, 
                 url: 'https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/%E8%9B%8B%E4%BB%94%E6%B4%BE%E5%AF%B9/%E7%A4%BC%E5%8C%85.png',
-                width: 245, // Full width
+                width: 245, 
                 zIndex: 25,
-                x: 380,      // 👈 X轴偏移 (Offset from center in px)
-                rotate: 12  // 👈 旋转角度
+                x: 380,      
+                rotate: 12 
             },
             { 
                 type: 'image', 
@@ -183,19 +183,17 @@ export const PROJECTS_DATA = [
                 url: 'https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/%E8%9B%8B%E4%BB%94%E6%B4%BE%E5%AF%B9/%E7%A4%BC%E5%8C%851.png',
                 width: 125,
                 zIndex: 26,
-                x: 80,      // 👈 X轴偏移
-                rotate: -2  // 👈 旋转角度
+                x: 80,      
+                rotate: -2 
             }
-            // Video Removed as requested
         ],
-        // 🟢 Video Interaction Configuration (The floating one)
+        // 🟢 ⚠️ 视频修复: 已替换为 GitHub Mirror 链接 (请务必上传 '蛋仔派对.mp4' 到仓库根目录)
         videoInteraction: {
-            y: 400, // Position Y from top
-            // NOTE: Vercel Blob is retained as I cannot move it, but other assets are optimized.
-            videoUrl: 'https://7picw4yc54rlegc8.public.blob.vercel-storage.com/%E8%9B%8B%E4%BB%94%E6%B4%BE%E5%AF%B9.mp4'
+            y: 400, 
+            videoUrl: 'https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/%E8%9B%8B%E4%BB%94%E6%B4%BE%E5%AF%B9.mp4'
         }
       },
-      detailImages: [], // Fallback/Empty as we use project2Config
+      detailImages: [], 
   },
   { 
       id: 3, title: '猿辅导运营设计', label: 'VISUAL DESIGN', year: '2022', color: '#4DA6FF', 
@@ -217,21 +215,19 @@ export const PROJECTS_DATA = [
       desc: 'Rhythm of city life captured in a rhythmic event discovery application.',
       tools: ['Figma', 'LibLib', 'PS', 'AI'],
       layout: 'gallery',
-      // 🟢 REMOVED: topSequenceConfig deleted as requested
       detailImages: [
           'https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/%E5%8D%AB%E5%B2%97/%E5%8D%AB%E5%B2%97%E9%95%BF%E5%9B%BE1.png',
-          // 🇨🇳 CHINA OPTIMIZATION: Updated raw github URL to jsDelivr mirror
           'https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/%E5%8D%AB%E5%B2%97/%E5%8D%AB%E5%B2%97%E9%95%BF%E5%9B%BE%E6%9C%89%E8%A7%86%E9%A2%912.png'
       ],
-      // 🟢 NEW: Extra Content for Project 4 (Video at Y 16600 - LOCKED)
+      // 🟢 ⚠️ 视频修复: 已替换为 GitHub Mirror 链接 (请务必上传 '卫岗牛奶.mp4' 到仓库根目录)
       extraContent: [
           {
               type: 'video',
-              url: 'https://7picw4yc54rlegc8.public.blob.vercel-storage.com/%E5%8D%AB%E5%B2%97%E7%89%9B%E5%A5%B6.mp4',
-              y: 16600, // 🔒 LOCKED: Positioned exactly as requested
-              width: 800, // You can adjust width here
+              url: 'https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/%E5%8D%AB%E5%B2%97%E7%89%9B%E5%A5%B6.mp4',
+              y: 16600, 
+              width: 800, 
               scale: 1,
-              x: 0 // Center adjusted
+              x: 0 
           }
       ]
   },
@@ -266,18 +262,16 @@ export const PROJECTS_DATA = [
               img: 'https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/animation/2%20(1).png', 
               video: 'https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/animation/daily.MP4',
               title: 'Daily of designer',
-              // 🟢 USER CONFIGURATION: Card Size & Position
               width: 320, 
               height: 569, // Portrait Cover
               flippedWidth: 484, 
               flippedHeight: 682.4, 
               y: 0, // 🟢 Baseline
               scale: 1,
-              // 🟢 NEW: Custom Introduction Text (Left of card)
               introConfig: {
                   text: '01\nDAILY OF DESIGNER\n\nA glimpse into\nthe creative process.',
-                  x: -250, // 250px to the left of the card
-                  y: 100, // 100px down from the top
+                  x: -250, 
+                  y: 100, 
                   rotate: 0,
                   fontSize: '14px',
                   width: '200px',
@@ -308,9 +302,8 @@ export const PROJECTS_DATA = [
           {
               id: 3,
               img: 'https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/animation/2%20(3).png', 
-              // 🟢 FIX: Updated this video to use raw GitHub URL instead of proxy to solve loading issues
-              // If you have a Vercel link for this specific video, please replace this URL.
-              video: 'https://7picw4yc54rlegc8.public.blob.vercel-storage.com/%E6%A2%B5%E9%AB%98%E6%B5%B7%E6%B5%AA.mp4',
+              // 🟢 ⚠️ 视频修复: 已替换为 GitHub Mirror 链接 (请务必上传 '梵高海浪.mp4' 到仓库根目录)
+              video: 'https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/%E6%A2%B5%E9%AB%98%E6%B5%B7%E6%B5%AA.mp4',
               title: 'MoonliGht',
               width: 320,
               height: 569,
@@ -331,7 +324,8 @@ export const PROJECTS_DATA = [
           {
               id: 4,
               img: 'https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/animation/2%20(4).png', 
-              video: 'https://7picw4yc54rlegc8.public.blob.vercel-storage.com/%E6%9C%80%E7%BB%88%E7%89%88%E6%9C%AC%E4%BA%86%E5%95%8A.mp4',
+              // 🟢 ⚠️ 视频修复: 已替换为 GitHub Mirror 链接 (请务必上传 '最终版本了啊.mp4' 到仓库根目录)
+              video: 'https://jsd.cdn.zzko.cn/gh/jayneysil520-dev/jayneysil@main/%E6%9C%80%E7%BB%88%E7%89%88%E6%9C%AC%E4%BA%86%E5%95%8A.mp4',
               title: '2  6k.  m e  r',
               width: 320,
               height: 569,
